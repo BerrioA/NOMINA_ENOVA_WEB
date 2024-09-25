@@ -1,14 +1,18 @@
 import {
   BarChart3,
-  Boxes,
   Receipt,
   LayoutDashboard,
-  Package,
   Settings,
   LifeBuoy,
   UserCircle,
+  UserRoundCog,
+  UsersRound,
+  LogOut,
 } from "lucide-react";
-import { SideBar, SidebarItem } from "../../../components/Sidebar/ui/ContentSideNav";
+import {
+  SideBar,
+  SidebarItem,
+} from "../../../components/Sidebar/ui/ContentSideNav";
 
 export const ItemsSidebar = () => {
   return (
@@ -17,16 +21,43 @@ export const ItemsSidebar = () => {
         icon={<LayoutDashboard size={20} />}
         text="Dashboard"
         alert
-        active
+        to="/dashboard"
       />
-      <SidebarItem icon={<BarChart3 size={20} />} text="Statistics" />
-      <SidebarItem icon={<UserCircle size={20} />} text="Users" />
-      <SidebarItem icon={<Boxes size={20} />} text="Inventory" />
-      <SidebarItem icon={<Package size={20} />} text="Orders" alert />
-      <SidebarItem icon={<Receipt size={20} />} text="Billings" />
+      <SidebarItem icon={<Receipt size={20} />} text="Nóminas" to="/nominas" />
+      <SidebarItem
+        icon={<BarChart3 size={20} />}
+        text="Consolidado"
+        to="/consolidado"
+      />
+      <SidebarItem
+        icon={<UserRoundCog size={20} />}
+        text="Administradores"
+        alert
+        to="/administradores"
+      />
+      <SidebarItem
+        icon={<UserCircle size={20} />}
+        text="Coordinadores"
+        to="/coordinadores"
+      />
+      <SidebarItem
+        icon={<UsersRound size={20} />}
+        text="Empleados"
+        to="/empleados"
+      />
+
       <hr className="my-3" />
-      <SidebarItem icon={<Settings size={20} />} text="Settings" />
-      <SidebarItem icon={<LifeBuoy size={20} />} text="Help" />
+      <SidebarItem
+        icon={<Settings size={20} />}
+        text="Settings"
+        to="/settings"
+      />
+      <SidebarItem icon={<LifeBuoy size={20} />} text="Help" to="/help" />
+      <SidebarItem
+        icon={<LogOut size={20} />}
+        text="Log Out"
+        to="/"
+      />
     </SideBar>
   );
 };

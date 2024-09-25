@@ -3,6 +3,7 @@ import LogoEnova from "../../../assets/images/LogoSigenGreen.png";
 import LogoDeveloper from "../../../assets/images/AB.jpg";
 import { useContext, createContext, useState } from "react";
 import PropTypes from "prop-types";
+import { NavLink } from "react-router-dom";
 
 const SidebarContext = createContext();
 
@@ -59,7 +60,7 @@ export const SideBar = ({ children }) => {
   );
 };
 
-export function SidebarItem({ icon, text, active, alert }) {
+export function SidebarItem({ icon, text, active, alert, to }) {
   const { expanded } = useContext(SidebarContext);
 
   return (
@@ -71,18 +72,34 @@ export function SidebarItem({ icon, text, active, alert }) {
         ${
           active
             ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-            : "hover:bg-indigo-50 text-gray-600"
+            : "hover:bg-indigo-50 hover:z-10 text-gray-600"
         }
-    `}
+      `}
     >
-      {icon}
-      <span
-        className={`overflow-hidden transition-all ${
-          expanded ? "w-52 ml-3" : "w-0"
-        }`}
-      >
-        {text}
-      </span>
+      {to ? (
+        <NavLink to={to} className="flex items-center w-full">
+          {icon}
+          <span
+            className={`overflow-hidden transition-all ${
+              expanded ? "w-52 ml-3" : "w-0"
+            }`}
+          >
+            {text}
+          </span>
+        </NavLink>
+      ) : (
+        <>
+          {icon}
+          <span
+            className={`overflow-hidden transition-all ${
+              expanded ? "w-52 ml-3" : "w-0"
+            }`}
+          >
+            {text}
+          </span>
+        </>
+      )}
+
       {alert && (
         <div
           className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
@@ -93,12 +110,10 @@ export function SidebarItem({ icon, text, active, alert }) {
 
       {!expanded && (
         <div
-          className={`
-          absolute left-full rounded-md px-2 py-1 ml-6
+          className={`absolute left-full rounded-md px-2 py-1 ml-6
           bg-indigo-100 text-indigo-800 text-sm
           invisible opacity-20 -translate-x-3 transition-all
-          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-      `}
+          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
         >
           {text}
         </div>
@@ -107,20 +122,20 @@ export function SidebarItem({ icon, text, active, alert }) {
   );
 }
 
-// Corrección de la definición de propTypes
-SideBar.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
 SidebarItem.propTypes = {
   icon: PropTypes.node.isRequired,
-  text: PropTypes.node.isRequired,
+  text: PropTypes.string.isRequired,
   active: PropTypes.bool,
   alert: PropTypes.bool,
+  to: PropTypes.string, // 'to' es opcional para manejar la navegación
 };
 
-// Establecer valores predeterminados
 SidebarItem.defaultProps = {
   active: false,
   alert: false,
+};
+
+// Corrección de la definición de propTypes
+SideBar.propTypes = {
+  children: PropTypes.node.isRequired,
 };

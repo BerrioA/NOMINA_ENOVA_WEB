@@ -1,8 +1,9 @@
 const columns = [
-  { name: "NAME", uid: "name" },
-  { name: "ROLE", uid: "role" },
-  { name: "STATUS", uid: "status" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "NOMBRE", uid: "name" },
+  { name: "CARGO", uid: "role" },
+  { name: "ESTADO", uid: "status" },
+  { name: "SALARIO", uid: "salario" },
+  { name: "ACCIONES", uid: "actions" },
 ];
 
 const users = [
@@ -13,6 +14,7 @@ const users = [
     team: "Management",
     status: "active",
     age: "29",
+    salario: "120.000.000",
     avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
     email: "tony.reichert@example.com",
   },
@@ -23,6 +25,7 @@ const users = [
     team: "Development",
     status: "paused",
     age: "25",
+    salario: "120.000.000",
     avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
     email: "zoey.lang@example.com",
   },
@@ -33,6 +36,7 @@ const users = [
     team: "Development",
     status: "active",
     age: "22",
+    salario: "120.000.000",
     avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
     email: "jane.fisher@example.com",
   },
@@ -43,6 +47,7 @@ const users = [
     team: "Marketing",
     status: "vacation",
     age: "28",
+    salario: "120.000.000",
     avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
     email: "william.howard@example.com",
   },
@@ -53,6 +58,7 @@ const users = [
     team: "Sales",
     status: "active",
     age: "24",
+    salario: "120.000.000",
     avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
     email: "kristen.cooper@example.com",
   },

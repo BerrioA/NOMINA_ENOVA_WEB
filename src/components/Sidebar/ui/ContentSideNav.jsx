@@ -11,11 +11,11 @@ export const SideBar = ({ children }) => {
 
   return (
     <aside
-      className={`h-screen ${expanded ? "w-60" : "w-16"} transition-all duration-300`}
+      className={`h-screen transition-all duration-300 ${
+        expanded ? "w-60 sm:w-40 md:w-52 lg:w-60" : "w-16"
+      } bg-white`}
     >
-      <nav
-        className={`h-full flex flex-col bg-white border-r shadow-sm transition-all`}
-      >
+      <nav className="h-full flex flex-col bg-white border-r shadow-sm transition-all">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src={LogoEnova}

@@ -1,12 +1,7 @@
 import { Input } from "@nextui-org/react";
 import PropTypes from "prop-types";
 
-export default function InputSingle({
-  type,
-  label,
-  value,
-  onChange,
-}) {
+export default function InputSingle({ type, label, value, onChange, isDisabled = false }) {
   const variants = ["bordered"];
 
   return (
@@ -22,7 +17,8 @@ export default function InputSingle({
             label={label}
             value={value} // Asegúrate de que el valor se pase correctamente
             onChange={onChange} // Manejo de cambios en el input
-            fullWidth // Opción para que ocupe todo el ancho
+            fullWidth
+            disabled={isDisabled}
           />
         </div>
       ))}

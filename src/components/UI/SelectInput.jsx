@@ -8,7 +8,7 @@ export default function SelectInput({ label, placeholder }) {
       isRequired
       label={label}
       placeholder={placeholder}
-      defaultSelectedKeys={["0"]}
+      defaultSelectedKeys={[""]}
       className="max-w-xs mt-4"
     >
       {sedes.map((sede) => (

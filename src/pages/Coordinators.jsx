@@ -1,11 +1,11 @@
 import { Layout } from "./Layout";
 import TableUser from "../components/TableUser";
-import { WelcomeAndText } from "../components/UI/WelcomeAndText";
-import { ButtonsCustom } from "../components/ButtonsCustom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../services/AuthSlice";
+import { UserRoundPlus } from "lucide-react";
+import ButtonSingle from "../components/UI/ButtonSingle";
 
 export const Coordinators = () => {
     const dispatch = useDispatch();
@@ -23,11 +23,13 @@ export const Coordinators = () => {
     }, [isError, navigate]);
   return (
     <Layout>
-      <WelcomeAndText
-        title="Coordinadores"
-        Subtitle="Lista de Coordinadores."
-      />
-      <ButtonsCustom />
+      <div className="flex justify-start mb-4 sm:m-auto">
+        <ButtonSingle
+          icon={<UserRoundPlus />}
+          textButton="Agregar Coordinador"
+          className="w-32"
+        />
+      </div>
       <TableUser />
     </Layout>
   );

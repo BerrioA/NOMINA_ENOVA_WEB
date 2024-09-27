@@ -7,8 +7,11 @@ import { Coordinators } from "./pages/Coordinators";
 import { Nomina } from "./pages/Nomina";
 import { Consolidado } from "./pages/Consolidado";
 import { AddEmploye } from "./pages/AddEmploye";
+import { EditEmploye } from "./pages/EditEmploye";
 import { AddAdmin } from "./pages/AddAdmin";
+import { EditAdmin } from "./pages/EditAdmin";
 import { AddCoordinator } from "./pages/AddCoordinator";
+import { EditCoordinador } from "./pages/EditCoordinador";
 
 function App() {
   return (
@@ -22,14 +25,15 @@ function App() {
           <Route path="/coordinadores" element={<Coordinators />} />
           <Route path="/nominas" element={<Nomina />} />
           <Route path="/consolidado" element={<Consolidado />} />
-          <Route path="/agregarempleado" element={<AddEmploye />} />
+          <Route path="/empleado/agregar" element={<AddEmploye />} />
           <Route path="/agregaradministrador" element={<AddAdmin />} />
+          <Route path="/administradores/editar/:id" element={<EditAdmin />} />
           <Route path="/agregarcoordinador" element={<AddCoordinator />} />
-
-          {/* <Route
-            path="/administradores/editar/:id"
-            element={<EditarAdministrador />}
-          /> */}
+          <Route
+            path="/coordinadores/editar/:id"
+            element={<EditCoordinador />}
+          />
+          <Route path="/empleados/editar/:id" element={<EditEmploye />} />
         </Routes>
       </BrowserRouter>
     </>

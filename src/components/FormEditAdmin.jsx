@@ -1,10 +1,9 @@
 import ButtonSingle from "./UI/ButtonSingle";
 import InputSingle from "./UI/InputSingle";
 
-export const FormAddAdmin = () => {
+export const FormEditAdmin = () => {
   return (
     <div className="container_principal mx-auto p-4">
-      
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <InputSingle type="text" label="Nombre" />
         <InputSingle type="text" label="Apellido" />

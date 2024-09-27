@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { Layout } from "./Layout";
-import { WelcomeAndText } from "../components/UI/WelcomeAndText";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../services/AuthSlice";
+import { Layout } from "./Layout";
+import { WelcomeAndText } from "../components/UI/WelcomeAndText";
+
 
 export const Dashboard = () => {
   const dispatch = useDispatch();

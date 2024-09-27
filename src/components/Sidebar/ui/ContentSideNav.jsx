@@ -60,13 +60,18 @@ export const SideBar = ({ children }) => {
   );
 };
 
-export function SidebarItem({ icon, text, active, alert, to }) {
+export function SidebarItem({ icon, text, active, alert, to, onClick }) {
   const { expanded } = useContext(SidebarContext);
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(); // Llama a la función onClick si se proporciona
+    }
+  };
 
   return (
     <li
-      className={`
-        relative flex items-center py-2 px-3 my-1
+      className={`relative flex items-center py-2 px-3 my-1
         font-medium rounded-md cursor-pointer
         transition-colors group
         ${
@@ -75,6 +80,7 @@ export function SidebarItem({ icon, text, active, alert, to }) {
             : "hover:bg-indigo-50 hover:z-10 text-gray-600"
         }
       `}
+      onClick={handleClick} // Maneja el clic aquí
     >
       {to ? (
         <NavLink to={to} className="flex items-center w-full">
@@ -128,6 +134,7 @@ SidebarItem.propTypes = {
   active: PropTypes.bool,
   alert: PropTypes.bool,
   to: PropTypes.string, // 'to' es opcional para manejar la navegación
+  onClick: PropTypes.func, // Prop para manejar clics
 };
 
 SidebarItem.defaultProps = {

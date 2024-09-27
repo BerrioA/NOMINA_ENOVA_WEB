@@ -6,7 +6,7 @@ import ButtonSingle from "./UI/ButtonSingle";
 import InputSingle from "./UI/InputSingle";
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
+  const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const Login = () => {
 
   const Auth = (e) => {
     e.preventDefault();
-    dispatch(LoginUser({ email, password }));
+    dispatch(LoginUser({ correo, password }));
   };
 
   return (
@@ -52,8 +52,8 @@ export const Login = () => {
             <InputSingle
               type="email"
               label="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
             />
             <InputSingle
               type="password"

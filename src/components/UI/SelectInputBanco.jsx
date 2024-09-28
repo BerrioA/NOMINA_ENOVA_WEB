@@ -1,8 +1,8 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import PropTypes from "prop-types";
-import { sedes } from "../../services/Sedes";
+import { bancos } from "../../services/Bancos";
 
-export default function SelectInput({ label, placeholder, value, onChange }) {
+export default function SelectInputBancos({ label, placeholder, value, onChange }) {
   return (
     <Select
       isRequired
@@ -12,14 +12,14 @@ export default function SelectInput({ label, placeholder, value, onChange }) {
       onSelectionChange={onChange} // Maneja el cambio
       className="max-w-xs mt-4"
     >
-      {sedes.map((sede) => (
-        <SelectItem key={sede.key}>{sede.label}</SelectItem>
+      {bancos.map((banco) => (
+        <SelectItem key={banco.key}>{banco.label}</SelectItem>
       ))}
     </Select>
   );
 }
 
-SelectInput.propTypes = {
+SelectInputBancos.propTypes = {
   label: PropTypes.node.isRequired,
   placeholder: PropTypes.node.isRequired,
   value: PropTypes.string.isRequired, // La prop value ahora es requerida

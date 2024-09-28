@@ -15,6 +15,7 @@ import { EyeIcon } from "./UI/EyeIcon";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { AddIcon } from "./UI/AddIcon";
 
 export const TableEmploye = () => {
   const [empleados, setEmpleados] = useState([]);
@@ -77,12 +78,17 @@ export const TableEmploye = () => {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
+            <Tooltip content="Cargar Nómina">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <AddIcon />
+              </span>
+            </Tooltip>
             <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EyeIcon />
               </span>
             </Tooltip>
-            <Tooltip content="Edit user">
+            <Tooltip content="Editar Usuario">
               <Link to={`/empleados/editar/${empleado.uuid}`}>
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                   <EditIcon />
@@ -90,7 +96,7 @@ export const TableEmploye = () => {
               </Link>
             </Tooltip>
 
-            <Tooltip color="danger" content="Delete user">
+            <Tooltip color="danger" content="Eliminar Empleado">
               <span
                 className="text-lg text-danger cursor-pointer active:opacity-50"
                 onClick={() => deleteEmpleado(empleado.uuid)}

@@ -1,7 +1,13 @@
 import { Input } from "@nextui-org/react";
 import PropTypes from "prop-types";
 
-export default function InputSingle({ type, label, value, onChange, isDisabled = false }) {
+export default function InputSingle({
+  type,
+  label,
+  value,
+  onChange,
+  isDisabled = false,
+}) {
   const variants = ["bordered"];
 
   return (
@@ -33,4 +39,5 @@ InputSingle.propTypes = {
   value: PropTypes.string, // Se añade prop para el valor
   onChange: PropTypes.func, // Se añade prop para el cambio
   placeholder: PropTypes.string, // Se añade prop para el placeholder
+  isDisabled: PropTypes.bool,
 };

@@ -1,4 +1,3 @@
-// Librerías externas
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import {
   Dropdown,
@@ -8,7 +7,7 @@ import {
 } from "@nextui-org/react";
 import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import LogoEnova from "../../../assets/images/LogoSigenGreen.png";
+import LogoEnova from "../../../assets/images/LogoS.png";
 import LogoDeveloper from "../../../assets/images/AB.jpg";
 import { useContext, createContext, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,6 +20,7 @@ export const SideBar = ({ children }) => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { user } = useSelector((state) => state.auth);
+
   const Logout = () => {
     dispatch(LogoutAction());
     dispatch(reset());
@@ -38,10 +38,17 @@ export const SideBar = ({ children }) => {
           <img
             src={LogoEnova}
             className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
+              expanded ? "w-8" : "w-0"
             }`}
             alt="LogoSideBar"
           />
+          <h1
+            className={`text-gray-600 font-bold transition-all duration-400 ${
+              expanded ? "w-auto" : "hidden"
+            }`}
+          >
+            SIGEN
+          </h1>
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"

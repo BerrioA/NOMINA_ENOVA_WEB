@@ -7,16 +7,15 @@ import SelectInputCargos from "./UI/SelectInputCargo";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
 export const FormAddEmploye = () => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
-  const [nit, setNit] = useState("");
-  const [banco, setBanco] = useState("");
-  const [numcuenta, setNunCuenta] = useState("");
+  const [nit, setNit] = useState(""); // Cambiado de correo a nit
+  const [banco, setBanco] = useState(""); // Cambiado de password a banco
+  const [numcuenta, setNumCuenta] = useState(""); // Cambiado de rol a numcuenta
+  const [honomensual, setHonoMensual] = useState(""); // Honorarios mensuales
   const [sede, setSede] = useState("");
-  const [cargo, setCargo] = useState("");
-  const [honomensual, setHonoMensual] = useState("");
+  const [cargo, setCargo] = useState(""); // Cambiado de rol a cargo
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
@@ -26,14 +25,14 @@ export const FormAddEmploye = () => {
       await axios.post("http://localhost:5000/empleados", {
         nombre: nombre,
         apellido: apellido,
-        nit: nit,
-        banco: banco,
-        numcuenta: numcuenta,
-        sede: sede,
-        cargo: cargo,
-        honomensual: honomensual,
+        nit: nit, // Guardar el nit
+        banco: banco, // Guardar el banco
+        numcuenta: numcuenta, // Guardar el número de cuenta
+        honomensual: honomensual, // Guardar honorarios mensuales
+        sede: sede, // Guardar la sede
+        cargo: cargo, // Guardar el cargo
       });
-      navigate("/empleados");
+      navigate("/empleados"); // Redirigir a la lista de empleados
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);
@@ -63,8 +62,8 @@ export const FormAddEmploye = () => {
           <div className="sm:flex-1">
             <InputSingle
               type="text"
-              label="N° Documento"
-              value={nit}
+              label="NIT"
+              value={nit} // Cambiado a nit
               onChange={(e) => setNit(e.target.value)}
             />
           </div>
@@ -72,36 +71,37 @@ export const FormAddEmploye = () => {
             <SelectInputBancos
               label={"Banco"}
               placeholder={"Seleccione un Banco"}
-              value={banco} // Mantener el valor seleccionado
-              onChange={(selected) => setBanco(selected.currentKey)} // Manejar el cambio
+              value={banco} // Cambiado de password a banco
+              onChange={(selected) => setBanco(selected.currentKey)} // Manejar el cambio de banco
             />
             <InputSingle
               type="text"
               label="N° Cuenta"
-              value={numcuenta}
-              onChange={(e) => setNunCuenta(e.target.value)}
+              value={numcuenta} // Cambiado de rol a numcuenta
+              onChange={(e) => setNumCuenta(e.target.value)}
             />
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-4">
+          <InputSingle
+            type="text"
+            label="Honorarios Mensuales"
+            value={honomensual} // Honorarios mensuales
+            onChange={(e) => setHonoMensual(e.target.value)}
+          />
           <SelectInput
+            Disable
             label={"Sede a la que pertenece"}
             placeholder={"Seleccione una Sede"}
-            value={sede} // Mantener el valor seleccionado
-            onChange={(selected) => setSede(selected.currentKey)} // Manejar el cambio
+            value={sede}
+            onChange={(selected) => setSede(selected.currentKey)}
           />
           <SelectInputCargos
             label={"Cargo"}
             placeholder={"Seleccione un Cargo"}
-            value={cargo} // Mantener el valor seleccionado
-            onChange={(selected) => setCargo(selected.currentKey)} // Manejar el cambio
-          />
-          <InputSingle
-            type="text" // Considerar cambiar a "number" para mejor validación
-            label="Honorarios Mensuales"
-            value={honomensual}
-            onChange={(e) => setHonoMensual(parseFloat(e.target.value) || 0)} // Convertir a número
+            value={cargo} // Cambiado de rol a cargo
+            onChange={(selected) => setCargo(selected.currentKey)} // Manejar el cambio de cargo
           />
         </div>
         <ButtonSingle type="submit" textButton="Guardar Empleado" />

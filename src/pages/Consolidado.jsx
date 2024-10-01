@@ -9,7 +9,7 @@ import { getMe } from "../services/AuthSlice";
 export const Consolidado = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isError } = useSelector((state) => state.auth);
+    const { isError, user } = useSelector((state) => state.auth);
 
     useEffect(() => {
       dispatch(getMe());
@@ -19,7 +19,10 @@ export const Consolidado = () => {
       if (isError) {
         navigate("/");
       }
-    }, [isError, navigate]);
+      if (user && user.rol !== "Administrador") {
+        navigate("/dashboard");
+      }
+    }, [isError, user, navigate]);
   return (
     <Layout>
       <WelcomeAndText title="Consolidado" Subtitle="Consolidado de nominas." />

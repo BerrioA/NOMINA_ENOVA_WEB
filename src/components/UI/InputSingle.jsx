@@ -2,42 +2,40 @@ import { Input } from "@nextui-org/react";
 import PropTypes from "prop-types";
 
 export default function InputSingle({
-  type,
+  type = "text", // Valor predeterminado de tipo
   label,
   value,
   onChange,
-  isDisabled = false,
+  isDisabled = false, // Valor predeterminado para isDisabled
+  isRequired = false, // Valor predeterminado para isRequired
+  placeholder = "", // Valor predeterminado para placeholder
 }) {
-  const variants = ["bordered"];
-
   return (
     <div className="w-full flex flex-col gap-4 mt-5">
-      {variants.map((variant) => (
-        <div
-          key={variant}
-          className="flex w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4"
-        >
-          <Input
-            type={type}
-            variant={variant}
-            label={label}
-            value={value} // Asegúrate de que el valor se pase correctamente
-            onChange={onChange} // Manejo de cambios en el input
-            fullWidth
-            disabled={isDisabled}
-          />
-        </div>
-      ))}
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4">
+        <Input
+          type={type} // Pasamos el tipo de input (ej. text, email, etc.)
+          label={label} // Etiqueta del input
+          value={value} // Valor del input
+          onChange={onChange} // Función de manejo de cambio
+          fullWidth
+          disabled={isDisabled} // Maneja el estado de deshabilitado
+          required={isRequired} // Campo obligatorio
+          placeholder={placeholder} // Placeholder opcional
+          variant="bordered" // Variante predeterminada "bordered"
+        />
+      </div>
     </div>
   );
 }
 
-// Definición correcta de propTypes
+// Definición de propTypes
 InputSingle.propTypes = {
-  type: PropTypes.string.isRequired, // Cambiado a string para el tipo de input
-  label: PropTypes.string.isRequired, // Cambiado a string para la etiqueta
-  value: PropTypes.string, // Se añade prop para el valor
-  onChange: PropTypes.func, // Se añade prop para el cambio
-  placeholder: PropTypes.string, // Se añade prop para el placeholder
-  isDisabled: PropTypes.bool,
+  type: PropTypes.string, // Cambiado a string, no obligatorio
+  label: PropTypes.string.isRequired, // Etiqueta es obligatoria
+  value: PropTypes.string.isRequired, // Valor es obligatorio
+  onChange: PropTypes.func.isRequired, // onChange es obligatorio
+  placeholder: PropTypes.string, // Placeholder opcional
+  isDisabled: PropTypes.bool, // Campo para manejar si está deshabilitado
+  isRequired: PropTypes.bool, // Campo para manejar si es obligatorio
 };

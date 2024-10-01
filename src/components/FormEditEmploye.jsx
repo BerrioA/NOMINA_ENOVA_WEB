@@ -99,7 +99,7 @@ export const FormEditEmploye = () => {
               onChange={(selected) => setBanco(selected.currentKey)} // Manejar el cambio
             />
             <InputSingle
-              type="text"
+              type="number"
               label="N° Cuenta"
               value={numcuenta}
               onChange={(e) => setNunCuenta(e.target.value)}
@@ -121,7 +121,7 @@ export const FormEditEmploye = () => {
             onChange={(selected) => setCargo(selected.currentKey)} // Manejar el cambio
           />
           <InputSingle
-            type="text" // Considerar cambiar a "number" para mejor validación
+            type="number" // Considerar cambiar a "number" para mejor validación
             label="Honorarios Mensuales"
             value={honomensual}
             onChange={(e) => setHonoMensual(parseFloat(e.target.value) || 0)} // Convertir a número

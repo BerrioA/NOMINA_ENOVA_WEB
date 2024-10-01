@@ -16,10 +16,11 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { AddIcon } from "./UI/AddIcon";
+import { useSelector } from "react-redux";
 
 export const TableEmploye = () => {
   const [empleados, setEmpleados] = useState([]);
-
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     getEmpleados();
   }, []);
@@ -75,37 +76,51 @@ export const TableEmploye = () => {
             }).format(empleado.honomensual)}
           </p>
         );
+        
       case "actions":
-        return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Cargar Nómina">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <AddIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Editar Usuario">
-              <Link to={`/empleados/editar/${empleado.uuid}`}>
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                  <EditIcon />
-                </span>
-              </Link>
-            </Tooltip>
+  // Verificar si el usuario es Coordinador antes de renderizar las acciones
+  if (user && user.rol === "Coordinador") {
+    
+    return (
+      <div className="relative flex items-center gap-2">
+        {/* Cargar Nómina */}
+        <Tooltip content="Cargar Nómina">
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <AddIcon />
+          </span>
+        </Tooltip>
 
-            <Tooltip color="danger" content="Eliminar Empleado">
-              <span
-                className="text-lg text-danger cursor-pointer active:opacity-50"
-                onClick={() => deleteEmpleado(empleado.uuid)}
-              >
-                <DeleteIcon />
-              </span>
-            </Tooltip>
-          </div>
-        );
+        {/* Ver Detalles */}
+        <Tooltip content="Details">
+          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <EyeIcon />
+          </span>
+        </Tooltip>
+
+        {/* Editar Usuario */}
+        <Tooltip content="Editar Usuario">
+          <Link to={`/empleados/editar/${empleado.uuid}`}>
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <EditIcon />
+            </span>
+          </Link>
+        </Tooltip>
+
+        {/* Eliminar Empleado */}
+        <Tooltip color="danger" content="Eliminar Empleado">
+          <span
+            className="text-lg text-danger cursor-pointer active:opacity-50"
+            onClick={() => deleteEmpleado(empleado.uuid)}
+          >
+            <DeleteIcon />
+          </span>
+        </Tooltip>
+      </div>
+    );
+  }
+
+  return null; // Si no es "Coordinador", no retorna nada
+
       default:
         return empleado[columnKey];
     }

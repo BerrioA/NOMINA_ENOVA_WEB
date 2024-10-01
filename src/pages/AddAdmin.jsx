@@ -8,7 +8,7 @@ import { getMe } from "../services/AuthSlice";
 export const AddAdmin = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isError } = useSelector((state) => state.auth);
+    const { isError, user } = useSelector((state) => state.auth);
 
     useEffect(() => {
       dispatch(getMe());
@@ -18,7 +18,10 @@ export const AddAdmin = () => {
       if (isError) {
         navigate("/");
       }
-    }, [isError, navigate]);
+      if (user && user.rol !== "Administrador") {
+        navigate("/dashboard");
+      }
+    }, [isError, user, navigate]);
 
   return (
     <Layout>

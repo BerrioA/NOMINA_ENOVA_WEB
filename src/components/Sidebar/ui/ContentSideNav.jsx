@@ -1,14 +1,31 @@
+// Librerías externas
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/react";
+import { NavLink, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import LogoEnova from "../../../assets/images/LogoSigenGreen.png";
 import LogoDeveloper from "../../../assets/images/AB.jpg";
 import { useContext, createContext, useState } from "react";
-import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { LogOut as LogoutAction, reset } from "../../../services/AuthSlice";
 
 const SidebarContext = createContext();
 
 export const SideBar = ({ children }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
+  const { user } = useSelector((state) => state.auth);
+  const Logout = () => {
+    dispatch(LogoutAction());
+    dispatch(reset());
+    navigate("/");
+  };
 
   return (
     <aside
@@ -49,10 +66,32 @@ export const SideBar = ({ children }) => {
             }`}
           >
             <div className="leading-3">
-              <h4 className="font-semibold">Alejandro Berrio</h4>
-              <span className="text-xs text-gray-600">Developer</span>
+              <h4 className="font-semibold">{`${user && user.nombre} ${
+                user && user.apellido
+              }`}</h4>
+              <span className="text-xs text-gray-600">
+                {user && user.correo}
+              </span>
             </div>
-            <MoreVertical size={20} />
+
+            <Dropdown>
+              <DropdownTrigger>
+                <MoreVertical size={20} />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Static Actions">
+                <DropdownItem key="copy" to="/ajustes">
+                  Ajustes
+                </DropdownItem>
+                <DropdownItem
+                  key="delete"
+                  className="text-danger"
+                  color="danger"
+                  onClick={Logout}
+                >
+                  Cerrar Sesión
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </div>
       </nav>
@@ -65,7 +104,7 @@ export function SidebarItem({ icon, text, active, alert, to, onClick }) {
 
   const handleClick = () => {
     if (onClick) {
-      onClick(); // Llama a la función onClick si se proporciona
+      onClick();
     }
   };
 
@@ -80,7 +119,7 @@ export function SidebarItem({ icon, text, active, alert, to, onClick }) {
             : "hover:bg-indigo-50 hover:z-10 text-gray-600"
         }
       `}
-      onClick={handleClick} // Maneja el clic aquí
+      onClick={handleClick}
     >
       {to ? (
         <NavLink to={to} className="flex items-center w-full">
@@ -133,8 +172,8 @@ SidebarItem.propTypes = {
   text: PropTypes.string.isRequired,
   active: PropTypes.bool,
   alert: PropTypes.bool,
-  to: PropTypes.string, // 'to' es opcional para manejar la navegación
-  onClick: PropTypes.func, // Prop para manejar clics
+  to: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 SidebarItem.defaultProps = {
@@ -142,7 +181,6 @@ SidebarItem.defaultProps = {
   alert: false,
 };
 
-// Corrección de la definición de propTypes
 SideBar.propTypes = {
   children: PropTypes.node.isRequired,
 };

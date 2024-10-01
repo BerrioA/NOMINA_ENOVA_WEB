@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { getMe } from "../services/AuthSlice";
 
 export const EditCoordinador = () => {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { isError, administrador } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
@@ -18,7 +19,11 @@ export const EditCoordinador = () => {
     if (isError) {
       navigate("/");
     }
-  }, [isError, navigate]);
+    if (administrador && administrador.rol !== "Administrador") {
+      navigate("/dashboard");
+    }
+  }, [isError, administrador, navigate]);
+
   return (
     <Layout>
       <FormEditCoordinator />

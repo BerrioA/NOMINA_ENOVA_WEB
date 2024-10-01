@@ -26,14 +26,13 @@ function App() {
           <Route path="/nominas" element={<Nomina />} />
           <Route path="/consolidado" element={<Consolidado />} />
           <Route path="/empleado/agregar" element={<AddEmploye />} />
-          <Route path="/agregaradministrador" element={<AddAdmin />} />
-          <Route path="/administradores/editar/:id" element={<EditAdmin />} />
-          <Route path="/agregarcoordinador" element={<AddCoordinator />} />
-          <Route
-            path="/coordinadores/editar/:id"
-            element={<EditCoordinador />}
-          />
+          <Route path="/administrador/agregar" element={<AddAdmin />} />
+          <Route path="/administrador/editar/:id" element={<EditAdmin />} />
+          <Route path="/coordinador/agregar" element={<AddCoordinator />} />
+          <Route path="/coordinador/editar/:id" element={<EditCoordinador />} />
           <Route path="/empleados/editar/:id" element={<EditEmploye />} />
+          <Route path="/ajustes" element={<EditEmploye />} />
+          <Route path="/ayuda" element={<EditEmploye />} />
         </Routes>
       </BrowserRouter>
     </>

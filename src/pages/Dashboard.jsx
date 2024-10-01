@@ -9,7 +9,7 @@ import { WelcomeAndText } from "../components/UI/WelcomeAndText";
 export const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { isError, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
@@ -25,7 +25,7 @@ export const Dashboard = () => {
     <Layout>
       <WelcomeAndText
         title="Dashboard"
-        Subtitle="Bienvenido(a) de vuelta...."
+        Subtitle={`Bienvenido(a) de vuelta ${user && user.nombre}👋`}
       />
     </Layout>
   );

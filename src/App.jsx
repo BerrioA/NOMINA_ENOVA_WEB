@@ -12,6 +12,7 @@ import { AddAdmin } from "./pages/AddAdmin";
 import { EditAdmin } from "./pages/EditAdmin";
 import { AddCoordinator } from "./pages/AddCoordinator";
 import { EditCoordinador } from "./pages/EditCoordinador";
+import { UploadNomina } from "./pages/UploadNomina";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/coordinador/agregar" element={<AddCoordinator />} />
           <Route path="/coordinador/editar/:id" element={<EditCoordinador />} />
           <Route path="/empleados/editar/:id" element={<EditEmploye />} />
+          <Route path="/nomina/cargar/:id" element={<UploadNomina />} />
           <Route path="/ajustes" element={<EditEmploye />} />
           <Route path="/ayuda" element={<EditEmploye />} />
         </Routes>

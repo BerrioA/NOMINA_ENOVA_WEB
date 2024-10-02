@@ -51,6 +51,7 @@ export const FormAddNomina = () => {
     }
   }, [honodia, totaldiasliquidar]);
 
+<<<<<<< HEAD
 useEffect(() => {
   const getEmpleadoById = async () => {
     try {
@@ -74,12 +75,40 @@ useEffect(() => {
 }, [id]);
 
  
+=======
+  useEffect(() => {
+    const getEmpleadoById = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/empleados/${id}` // Utilizamos el id desde useParams
+        );
+        setNombre(response.data.nombre);
+        setApellido(response.data.apellido);
+        setNit(response.data.nit);
+        setBanco(response.data.banco);
+        setCargo(response.data.cargo);
+        setnumCuenta(response.data.numcuenta);
+        setHonoMensual(response.data.honomensual);
+        setSede(response.data.sede);
+      } catch (error) {
+        if (error.response) {
+          setMsg(error.response.data.msg);
+        }
+      }
+    };
+    getEmpleadoById();
+  }, [id]); // Dependencia de id
+>>>>>>> 2add58b0b2e40865bb0b2d02dbf4fa9637bc6401
 
   const guardarNomina = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/nominas", {
+<<<<<<< HEAD
         empleadoId: empleadoid, // Aquí utilizamos el 'id' correcto del empleado
+=======
+        empleadoId: empleadoId,
+>>>>>>> 2add58b0b2e40865bb0b2d02dbf4fa9637bc6401
         honoquincena: honoquincena,
         honodia: honodia,
         totaldiasliquidar: totaldiasliquidar,

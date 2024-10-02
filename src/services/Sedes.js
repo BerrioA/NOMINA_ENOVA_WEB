@@ -1,5 +1,5 @@
 export const sedes = [
-  { key: "Centra", label: "Central" },
+  { key: "Central", label: "Central" },
   { key: "Sincelejo", label: "Sincelejo" },
   { key: "Monteria", label: "Monteria" },
   { key: "Caucacia", label: "Caucacia" },

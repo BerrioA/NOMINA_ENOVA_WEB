@@ -85,7 +85,7 @@ export const TableEmploye = () => {
       <div className="relative flex items-center gap-2">
         {/* Cargar Nómina */}
         <Tooltip content="Cargar Nómina">
-          <Link to={`/nomina/cargar/${empleado.uuid}`}>
+          <Link to={`/empleados/${empleado.uuid}/nomina`}>
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
               <AddIcon />
             </span>

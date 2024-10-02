@@ -24,10 +24,9 @@ export default function TableUsers() {
 
       // If no cursor is available, then we're loading the first page.
       // Otherwise, the cursor is the next URL to load, as returned from the previous page.
-      const res = await fetch(
-        cursor || "https://swapi.py4e.com/api/people/?search=",
-        { signal }
-      );
+      const res = await fetch(cursor || "http://localhost:5000/nominas", {
+        signal,
+      });
       let json = await res.json();
 
       setHasMore(json.next !== null);
@@ -62,22 +61,32 @@ export default function TableUsers() {
       }}
     >
       <TableHeader>
-        <TableColumn key="name">Name</TableColumn>
-        <TableColumn key="height">Cargo</TableColumn>
-        <TableColumn key="mass">Cédula</TableColumn>
-        <TableColumn key="mass">Banco</TableColumn>
-        <TableColumn key="mass">N° Cuenta</TableColumn>
-        <TableColumn key="birth_year">Honorarios Mes</TableColumn>
-        <TableColumn key="birth_year">Honorarios Quincenal</TableColumn>
-        <TableColumn key="birth_year">Honorarios Día</TableColumn>
-        <TableColumn key="mass">Total Dias a Liquidar</TableColumn>
-        <TableColumn key="mass">Hon. Periodo Liquidación</TableColumn>
-        <TableColumn key="mass">Valor Total Calses Instructores</TableColumn>
-        <TableColumn key="mass">
+        <TableColumn key="honoquincena">Name</TableColumn>
+        <TableColumn key="honodia">Cargo</TableColumn>
+        <TableColumn key="totaldiasliquidar">Cédula</TableColumn>
+        <TableColumn key="clasesapoyosena">Banco</TableColumn>
+        <TableColumn key="diasdominical">N° Cuenta</TableColumn>
+        <TableColumn key="clasesintructores">Honorarios Mes</TableColumn>
+        <TableColumn key="totalinscripcionesliquidar">
+          Honorarios Quincenal
+        </TableColumn>
+        <TableColumn key="honoperiodoliquidacion">Honorarios Día</TableColumn>
+        <TableColumn key="valortotaldominicales">
+          Total Dias a Liquidar
+        </TableColumn>
+        <TableColumn key="valortotalclasesinstructores">
+          Hon. Periodo Liquidación
+        </TableColumn>
+        <TableColumn key="comicioninscripcionestudiante">
+          Valor Total Calses Instructores
+        </TableColumn>
+        <TableColumn key="totalpagar">
           Comicion x Inscripciones Estudiantes
         </TableColumn>
-        <TableColumn key="mass">Total a Pagar</TableColumn>
-        <TableColumn key="mass">Saldo Pendiente</TableColumn>
+        <TableColumn key="pagosadicionalespendientes">
+          Total a Pagar
+        </TableColumn>
+        <TableColumn key="saldopendiente">Saldo Pendiente</TableColumn>
       </TableHeader>
       <TableBody
         isLoading={isLoading}

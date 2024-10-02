@@ -37,6 +37,7 @@ export const FormAddNomina = () => {
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
+  const [empleadoid, setEmpleadoId] = useState("");
 
   useEffect(() => {
     if (honomensual > 0) {
@@ -50,28 +51,27 @@ export const FormAddNomina = () => {
     }
   }, [honodia, totaldiasliquidar]);
 
-  useEffect(() => {
-    const getEmpleadoById = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/empleados/${id}`
-        );
-        setNombre(response.data.nombre);
-        setApellido(response.data.apellido);
-        setNit(response.data.nit);
-        setBanco(response.data.banco);
-        setCargo(response.data.cargo);
-        setnumCuenta(response.data.numcuenta);
-        setHonoMensual(response.data.honomensual);
-        setSede(response.data.sede);
-      } catch (error) {
-        if (error.response) {
-          setMsg(error.response.data.msg);
-        }
+useEffect(() => {
+  const getEmpleadoById = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/empleados/${id}`);
+      setEmpleadoId(response.data.id); // Aquí asegúrate de obtener el id correcto
+      setNombre(response.data.nombre);
+      setApellido(response.data.apellido);
+      setNit(response.data.nit);
+      setBanco(response.data.banco);
+      setCargo(response.data.cargo);
+      setnumCuenta(response.data.numcuenta);
+      setHonoMensual(response.data.honomensual);
+      setSede(response.data.sede);
+    } catch (error) {
+      if (error.response) {
+        setMsg(error.response.data.msg);
       }
-    };
-    getEmpleadoById();
-  }, [id]);
+    }
+  };
+  getEmpleadoById();
+}, [id]);
 
  
 
@@ -79,7 +79,7 @@ export const FormAddNomina = () => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/nominas", {
-        empleadoId: id,
+        empleadoId: empleadoid, // Aquí utilizamos el 'id' correcto del empleado
         honoquincena: honoquincena,
         honodia: honodia,
         totaldiasliquidar: totaldiasliquidar,
@@ -95,16 +95,14 @@ export const FormAddNomina = () => {
         pagosadicionalespendientes: pagosadicionalespendientes,
         saldopendiente: saldopendiente,
         observaciones: observaciones,
-        
       });
-      
+
       navigate("/nominas");
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);
       }
     }
-    
   };
 
   return (

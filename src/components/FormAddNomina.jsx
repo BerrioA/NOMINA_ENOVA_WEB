@@ -54,7 +54,7 @@ export const FormAddNomina = () => {
     const getEmpleadoById = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/empleados/${id}`
+          `http://localhost:5000/empleados/${id}` // Utilizamos el id desde useParams
         );
         setNombre(response.data.nombre);
         setApellido(response.data.apellido);
@@ -71,15 +71,13 @@ export const FormAddNomina = () => {
       }
     };
     getEmpleadoById();
-  }, [id]);
-
- 
+  }, [id]); // Dependencia de id
 
   const guardarNomina = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/nominas", {
-        empleadoId: id,
+        empleadoId: empleadoId,
         honoquincena: honoquincena,
         honodia: honodia,
         totaldiasliquidar: totaldiasliquidar,
@@ -95,16 +93,14 @@ export const FormAddNomina = () => {
         pagosadicionalespendientes: pagosadicionalespendientes,
         saldopendiente: saldopendiente,
         observaciones: observaciones,
-        
       });
-      
+
       navigate("/nominas");
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);
       }
     }
-    
   };
 
   return (

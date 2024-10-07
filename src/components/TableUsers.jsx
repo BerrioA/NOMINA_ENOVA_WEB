@@ -11,9 +11,10 @@ import {
 } from "@nextui-org/react";
 import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import { useAsyncList } from "@react-stately/data";
+import axios from "axios";
 
 export default function TableUsers() {
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [setIsLoading] = React.useState(true);
   const [hasMore, setHasMore] = React.useState(false);
 
   let list = useAsyncList({
@@ -22,19 +23,23 @@ export default function TableUsers() {
         setIsLoading(false);
       }
 
-      // If no cursor is available, then we're loading the first page.
-      // Otherwise, the cursor is the next URL to load, as returned from the previous page.
-      const res = await fetch(cursor || "http://localhost:5000/nominas", {
-        signal,
-      });
-      let json = await res.json();
+      try {
+        const res = await axios.get(cursor || "http://localhost:5000/nominas", {
+          signal: signal,
+        });
 
-      setHasMore(json.next !== null);
+        const items = Array.isArray(res.data) ? res.data : [res.data];
 
-      return {
-        items: json.results,
-        cursor: json.next,
-      };
+        setHasMore(false);
+
+        return {
+          items,
+          cursor: null,
+        };
+      } catch (error) {
+        console.error("Error al cargar los datos:", error);
+        return { items: [] };
+      }
     },
   });
 
@@ -61,43 +66,52 @@ export default function TableUsers() {
       }}
     >
       <TableHeader>
-        <TableColumn key="honoquincena">Name</TableColumn>
-        <TableColumn key="honodia">Cargo</TableColumn>
-        <TableColumn key="totaldiasliquidar">Cédula</TableColumn>
-        <TableColumn key="clasesapoyosena">Banco</TableColumn>
-        <TableColumn key="diasdominical">N° Cuenta</TableColumn>
-        <TableColumn key="clasesintructores">Honorarios Mes</TableColumn>
-        <TableColumn key="totalinscripcionesliquidar">
-          Honorarios Quincenal
-        </TableColumn>
-        <TableColumn key="honoperiodoliquidacion">Honorarios Día</TableColumn>
-        <TableColumn key="valortotaldominicales">
-          Total Dias a Liquidar
-        </TableColumn>
-        <TableColumn key="valortotalclasesinstructores">
-          Hon. Periodo Liquidación
+        <TableColumn key="nombre">Nombre</TableColumn>
+        <TableColumn key="cargo">Cargo</TableColumn>
+        <TableColumn key="cc">Cédula</TableColumn>
+        <TableColumn key="banco">Banco</TableColumn>
+        <TableColumn key="numcuenta">N° Cuenta</TableColumn>
+        <TableColumn key="honomensual">Honorarios Mes</TableColumn>
+        <TableColumn key="honoquincena">Honorarios Quincenal</TableColumn>
+        <TableColumn key="honodia">Honorarios Día</TableColumn>
+        <TableColumn key="totaldiasliquidar">Total Días a Liquidar</TableColumn>
+        <TableColumn key="valortotaldominicales">Total Dominicales</TableColumn>
+        <TableColumn key="valortotalclasesinstructor">
+          Valor Total Clases Instructores
         </TableColumn>
         <TableColumn key="comicioninscripcionestudiante">
-          Valor Total Calses Instructores
+          Comisión Inscripciones Estudiantes
         </TableColumn>
-        <TableColumn key="totalpagar">
-          Comicion x Inscripciones Estudiantes
-        </TableColumn>
-        <TableColumn key="pagosadicionalespendientes">
-          Total a Pagar
-        </TableColumn>
+        <TableColumn key="totalpagar">Total a Pagar</TableColumn>
         <TableColumn key="saldopendiente">Saldo Pendiente</TableColumn>
+        <TableColumn key="observaciones">Observaciones</TableColumn>
       </TableHeader>
-      <TableBody
-        isLoading={isLoading}
-        items={list.items}
-        loadingContent={<Spinner color="white" />}
-      >
+      <TableBody items={list.items} loadingContent={<Spinner color="blue" />}>
         {(item) => (
-          <TableRow key={item.name}>
-            {(columnKey) => (
-              <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-            )}
+          <TableRow key={item.uuid}>
+            {(columnKey) => {
+              const value = getKeyValue(item, columnKey);
+
+              // Mapa de columnas a propiedades de empleado
+              const empleadoFields = {
+                nombre: `${item.empleado?.nombre ?? ""} ${
+                  item.empleado?.apellido ?? ""
+                }`,
+                cargo: item.empleado?.cargo,
+                cc: item.empleado?.cc,
+                banco: item.empleado?.banco,
+                numcuenta: item.empleado?.numcuenta,
+              };
+
+              if (columnKey === "honomensual") {
+                return <TableCell>{item.empleado.honomensual}</TableCell>;
+              }
+
+              // Retorna el valor correspondiente o el valor original
+              return (
+                <TableCell>{empleadoFields[columnKey] ?? value}</TableCell>
+              );
+            }}
           </TableRow>
         )}
       </TableBody>

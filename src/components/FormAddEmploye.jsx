@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ButtonSingle from "./UI/ButtonSingle";
 import InputSingle from "./UI/InputSingle";
-import SelectInput from "./UI/SelectInput";
 import SelectInputBancos from "./UI/SelectInputBanco";
 import SelectInputCargos from "./UI/SelectInputCargo";
 import { useNavigate } from "react-router-dom";
@@ -10,12 +9,12 @@ import axios from "axios";
 export const FormAddEmploye = () => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
-  const [nit, setNit] = useState(""); // Cambiado de correo a nit
-  const [banco, setBanco] = useState(""); // Cambiado de password a banco
-  const [numcuenta, setNumCuenta] = useState(""); // Cambiado de rol a numcuenta
-  const [honomensual, setHonoMensual] = useState(""); // Honorarios mensuales
-  const [sede, setSede] = useState("");
-  const [cargo, setCargo] = useState(""); // Cambiado de rol a cargo
+  const [cc, setCc] = useState("");
+  const [banco, setBanco] = useState("");
+  const [numcuenta, setNumCuenta] = useState("");
+  const [honomensual, setHonoMensual] = useState("");
+  const [sede] = useState("");
+  const [cargo, setCargo] = useState("");
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
@@ -25,14 +24,14 @@ export const FormAddEmploye = () => {
       await axios.post("http://localhost:5000/empleados", {
         nombre: nombre,
         apellido: apellido,
-        nit: nit, // Guardar el nit
-        banco: banco, // Guardar el banco
-        numcuenta: numcuenta, // Guardar el número de cuenta
-        honomensual: honomensual, // Guardar honorarios mensuales
-        sede: sede, // Guardar la sede
-        cargo: cargo, // Guardar el cargo
+        cc: cc,
+        banco: banco,
+        numcuenta: numcuenta,
+        honomensual: honomensual,
+        sede: sede,
+        cargo: cargo,
       });
-      navigate("/empleados"); // Redirigir a la lista de empleados
+      navigate("/empleados");
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);
@@ -61,23 +60,23 @@ export const FormAddEmploye = () => {
         <div className="flex flex-col sm:flex-row gap-4 mb-4">
           <div className="sm:flex-1">
             <InputSingle
-              type="text"
-              label="NIT"
-              value={nit} // Cambiado a nit
-              onChange={(e) => setNit(e.target.value)}
+              type="number"
+              label="N° Cédula"
+              value={cc}
+              onChange={(e) => setCc(e.target.value)}
             />
           </div>
           <div className="flex sm:flex-1 gap-4">
             <SelectInputBancos
               label={"Banco"}
               placeholder={"Seleccione un Banco"}
-              value={banco} // Cambiado de password a banco
-              onChange={(selected) => setBanco(selected.currentKey)} // Manejar el cambio de banco
+              value={banco}
+              onChange={(selected) => setBanco(selected.currentKey)}
             />
             <InputSingle
               type="text"
               label="N° Cuenta"
-              value={numcuenta} // Cambiado de rol a numcuenta
+              value={numcuenta}
               onChange={(e) => setNumCuenta(e.target.value)}
             />
           </div>
@@ -87,25 +86,18 @@ export const FormAddEmploye = () => {
           <InputSingle
             type="text"
             label="Honorarios Mensuales"
-            value={honomensual} // Honorarios mensuales
+            value={honomensual}
             onChange={(e) => setHonoMensual(e.target.value)}
-          />
-          <SelectInput
-            Disable
-            label={"Sede a la que pertenece"}
-            placeholder={"Seleccione una Sede"}
-            value={sede}
-            onChange={(selected) => setSede(selected.currentKey)}
           />
           <SelectInputCargos
             label={"Cargo"}
             placeholder={"Seleccione un Cargo"}
-            value={cargo} // Cambiado de rol a cargo
-            onChange={(selected) => setCargo(selected.currentKey)} // Manejar el cambio de cargo
+            value={cargo}
+            onChange={(selected) => setCargo(selected.currentKey)}
           />
         </div>
         <ButtonSingle type="submit" textButton="Guardar Empleado" />
-        <p>{msg}</p>
+        <p className="text-center text-red-500">{msg}</p>
       </form>
     </div>
   );

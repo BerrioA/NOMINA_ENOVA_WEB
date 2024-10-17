@@ -34,6 +34,7 @@ export const TableEmploye = () => {
     }
   };
 
+
   const deleteEmpleado = async (empleadoId) => {
     try {
       await axios.delete(`http://localhost:5000/empleados/${empleadoId}`);

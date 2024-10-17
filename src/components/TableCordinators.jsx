@@ -107,7 +107,7 @@ export const TableCordinators = () => {
   const columns = [
     { uid: "nombre", name: "Nombre" },
     { uid: "correo", name: "Correo" },
-    { uid: "rol", name: "Rol" },
+    { uid: "sede", name: "Sede" },
     { uid: "actions", name: "Acciones" },
   ];
 

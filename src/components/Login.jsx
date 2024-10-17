@@ -25,16 +25,15 @@ export const Login = () => {
     if (isError || isSuccess) {
       const timer = setTimeout(() => {
         dispatch(reset());
-      },1000); // 500ms de delay para evitar conflictos
+      },1000);
 
-      return () => clearTimeout(timer); // Limpia el timeout si se desmonta
+      return () => clearTimeout(timer);
     }
   }, [user, isError, isSuccess, dispatch, navigate]);
 
   const Auth = (e) => {
     e.preventDefault();
 
-    // Validar que el campo de correo no esté vacío
     if (!correo) {
       setError("El correo es requerido.");
       return;
@@ -42,7 +41,6 @@ export const Login = () => {
       setError("La contraseña es requerida.");
       return;
     }
-    // Si todo está bien, limpiar errores y proceder con el login
     setError("");
     dispatch(LoginUser({ correo, password }));
   };

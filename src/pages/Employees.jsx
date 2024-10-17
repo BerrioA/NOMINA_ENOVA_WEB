@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 export const Employees = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { isError, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getMe());
@@ -25,13 +25,15 @@ export const Employees = () => {
   return (
     <Layout>
       <div className="flex justify-start mb-4">
-        <Link to="/empleado/agregar">
-          <ButtonSingle
-            icon={<UserRoundPlus />}
-            textButton="Agregar Empleado"
-            className="w-32"
-          />
-        </Link>
+        {user && user.rol === "Coordinador" && (
+          <Link to="/empleado/agregar">
+            <ButtonSingle
+              icon={<UserRoundPlus />}
+              textButton="Agregar Empleado"
+              className="w-32"
+            />
+          </Link>
+        )}
       </div>
       <TableEmploye />
     </Layout>

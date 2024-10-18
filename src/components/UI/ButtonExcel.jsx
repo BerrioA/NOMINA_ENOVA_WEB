@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { Button, Spinner } from "@nextui-org/react"; // Usamos NextUI en lugar de reactstrap
+import { Button, Spinner } from "@nextui-org/react";
 import * as XLSX from "xlsx";
 import PropTypes from "prop-types";
-
 
 const ButtonExcelEstilizado = ({ consolidado }) => {
   const [loading, setLoading] = useState(false);
 
-  const titulo = [{ A: "Consolidado de Nómina" }, {}]; // Cambiado a "Reporte de Nómina"
+  const titulo = [{ A: "Consolidado de Nómina" }, {}];
 
   const informacionAdicional = {
     A:
@@ -15,13 +14,11 @@ const ButtonExcelEstilizado = ({ consolidado }) => {
       new Date().toLocaleDateString(),
   };
 
-  // Ajustar las longitudes de columnas según tu necesidad
   const longitudes = [15, 20, 15, 20, 15, 15, 20, 20, 20, 20, 25, 30, 20, 25];
 
   const handleDownload = () => {
     setLoading(true);
 
-    // Encabezados de la tabla de Excel
     let tabla = [
       {
         A: { v: "Nombre", s: { font: { bold: true } } },
@@ -47,8 +44,41 @@ const ButtonExcelEstilizado = ({ consolidado }) => {
       },
     ];
 
-    // Agregar los datos de la nómina
+    let totalF = 0,
+      totalG = 0,
+      totalH = 0,
+      totalI = 0,
+      totalJ = 0,
+      totalK = 0,
+      totalL = 0,
+      totalM = 0,
+      totalN = 0;
+
     consolidado.forEach((item) => {
+      const honoMensual = Number(item.empleado?.honomensual || 0);
+      const honoQuincena = Number(item.honoquincena || 0);
+      const honoDia = Number(item.honodia || 0);
+      const totalDiasLiquidar = Number(item.totaldiasliquidar || 0);
+      const totalDominicales = Number(item.valortotaldominicales || 0);
+      const totalClasesInstructor = Number(
+        item.valortotalclasesinstructor || 0
+      );
+      const comicionInscripcion = Number(
+        item.comicioninscripcionestudiante || 0
+      );
+      const deducciones = Number(item.deducciones || 0);
+      const totalPagar = Number(item.totalpagar || 0);
+
+      totalF += honoMensual;
+      totalG += honoQuincena;
+      totalH += honoDia;
+      totalI += totalDiasLiquidar;
+      totalJ += totalDominicales;
+      totalK += totalClasesInstructor;
+      totalL += comicionInscripcion;
+      totalM += deducciones;
+      totalN += totalPagar;
+
       tabla.push({
         A: `${item.empleado?.nombre ?? ""} ${item.empleado?.apellido ?? ""}`,
         B: item.empleado?.cargo,
@@ -56,27 +86,41 @@ const ButtonExcelEstilizado = ({ consolidado }) => {
         D: item.empleado?.banco,
         E: item.empleado?.numcuenta,
         F: {
-          v: item.empleado?.honomensual,
+          v: honoMensual,
           s: { font: { bold: true, color: { rgb: "FF0000" } } },
-        }, // Negrita y color rojo
+        },
         G: {
-          v: item.honoquincena,
+          v: honoQuincena,
           s: { font: { bold: true, color: { rgb: "FF0000" } } },
         },
         H: {
-          v: item.honodia,
+          v: honoDia,
           s: { font: { bold: true, color: { rgb: "FF0000" } } },
         },
-        I: item.totaldiasliquidar,
-        J: item.valortotaldominicales,
-        K: item.valortotalclasesinstructor,
-        L: item.comicioninscripcionestudiante,
-        M: item.deducciones,
+        I: totalDiasLiquidar,
+        J: totalDominicales,
+        K: totalClasesInstructor,
+        L: comicionInscripcion,
+        M: deducciones,
         N: {
-          v: item.totalpagar,
+          v: totalPagar,
           s: { font: { bold: true, color: { rgb: "FF0000" } } },
-        }, // Negrita y color rojo
+        },
       });
+    });
+
+    // Agregar la fila de totales
+    tabla.push({
+      A: "Total",
+      F: { v: totalF, s: { font: { bold: true, color: { rgb: "0000FF" } } } }, // Negrita y azul
+      G: { v: totalG, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
+      H: { v: totalH, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
+      I: { v: totalI, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
+      J: { v: totalJ, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
+      K: { v: totalK, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
+      L: { v: totalL, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
+      M: { v: totalM, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
+      N: { v: totalN, s: { font: { bold: true, color: { rgb: "0000FF" } } } },
     });
 
     const dataFinal = [...titulo, ...tabla, informacionAdicional];
@@ -84,21 +128,18 @@ const ButtonExcelEstilizado = ({ consolidado }) => {
     setTimeout(() => {
       crearArchivo(dataFinal);
       setLoading(false);
-    }, 1000); // Simulación de carga para mostrar el spinner
+    }, 1200);
   };
 
   const crearArchivo = (dataFinal) => {
     const libro = XLSX.utils.book_new();
-
     const hoja = XLSX.utils.json_to_sheet(dataFinal, { skipHeader: true });
 
-    // Merge cells for styling purposes (for title and additional info)
     hoja["!merges"] = [
       XLSX.utils.decode_range("A1:N1"),
       XLSX.utils.decode_range("A2:N2"),
     ];
 
-    // Aplicar anchos de columnas personalizados
     let propiedades = [];
     longitudes.forEach((col) => {
       propiedades.push({
@@ -122,11 +163,11 @@ const ButtonExcelEstilizado = ({ consolidado }) => {
           className="mt-2"
           onClick={handleDownload}
         >
-          Descargar en formato XLSX
+          Descargar en formato EXCEL
         </Button>
       ) : (
         <Button color="primary" disabled>
-          <Spinner size="sm" /> Generando...
+          <Spinner size="sm" color="default" /> Generando XLSX...
         </Button>
       )}
     </>
@@ -138,4 +179,3 @@ ButtonExcelEstilizado.propTypes = {
 };
 
 export default ButtonExcelEstilizado;
-

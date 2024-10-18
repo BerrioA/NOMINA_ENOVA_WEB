@@ -18,7 +18,7 @@ const SidebarContext = createContext();
 export const SideBar = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const { user } = useSelector((state) => state.auth);
 
   const Logout = () => {

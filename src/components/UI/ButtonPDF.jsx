@@ -77,11 +77,10 @@ const ButtonPDF = ({ consolidado }) => {
       },
     });
 
-    // Generar y descargar el archivo PDF
     setTimeout(() => {
-      doc.save("NominaReporte.pdf");
+      doc.save("Consolidado Reporte.pdf");
       setLoading(false);
-    }, 1000); // Simulación de carga
+    }, 1200);
   };
 
   return (

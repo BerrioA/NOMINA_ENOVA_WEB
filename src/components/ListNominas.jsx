@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import { useAsyncList } from "@react-stately/data";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function ListNominas() {
@@ -54,7 +55,7 @@ export default function ListNominas() {
       return value.toLocaleString("es-CO", {
         style: "currency",
         currency: "COP",
-        minimumFractionDigits: 0, // Puedes ajustar esto si deseas decimales
+        minimumFractionDigits: 0,
       });
     }
     return value;
@@ -73,47 +74,45 @@ export default function ListNominas() {
   };
 
   // Función para calcular los totales por columna
-const calculateTotals = (items) => {
-  return items.reduce(
-    (acc, item) => {
-      acc.honomensual += Number(item.empleado?.honomensual || 0);
-      acc.honoquincena += Number(item.honoquincena || 0);
-      acc.honodia += Number(item.honodia || 0); // Asegúrate de que esto sea un número
-      acc.totaldiasliquidar += Number(item.totaldiasliquidar || 0);
-      acc.valortotaldominicales += Number(item.valortotaldominicales || 0);
-      acc.valortotalclasesinstructor += Number(
-        item.valortotalclasesinstructor || 0
-      );
-      acc.comicioninscripcionestudiante += Number(
-        item.comicioninscripcionestudiante || 0
-      );
-      acc.totalpagar += Number(item.totalpagar || 0);
-      acc.saldopendiente += Number(item.saldopendiente || 0);
+  const calculateTotals = (items) => {
+    return items.reduce(
+      (acc, item) => {
+        acc.honomensual += Number(item.empleado?.honomensual || 0);
+        acc.honoquincena += Number(item.honoquincena || 0);
+        acc.honodia += Number(item.honodia || 0); // Asegúrate de que esto sea un número
+        acc.totaldiasliquidar += Number(item.totaldiasliquidar || 0);
+        acc.valortotaldominicales += Number(item.valortotaldominicales || 0);
+        acc.valortotalclasesinstructor += Number(
+          item.valortotalclasesinstructor || 0
+        );
+        acc.comicioninscripcionestudiante += Number(
+          item.comicioninscripcionestudiante || 0
+        );
+        acc.totalpagar += Number(item.totalpagar || 0);
+        acc.saldopendiente += Number(item.saldopendiente || 0);
 
-      return acc;
-    },
-    {
-      honomensual: 0,
-      honoquincena: 0,
-      honodia: 0, // Inicializado como número
-      totaldiasliquidar: 0,
-      valortotaldominicales: 0,
-      valortotalclasesinstructor: 0,
-      comicioninscripcionestudiante: 0,
-      totalpagar: 0,
-      saldopendiente: 0,
-    }
-  );
-};
+        return acc;
+      },
+      {
+        honomensual: 0,
+        honoquincena: 0,
+        honodia: 0, // Inicializado como número
+        totaldiasliquidar: 0,
+        valortotaldominicales: 0,
+        valortotalclasesinstructor: 0,
+        comicioninscripcionestudiante: 0,
+        totalpagar: 0,
+        saldopendiente: 0,
+      }
+    );
+  };
 
-
-  // Obtener las nóminas agrupadas por sede
   const groupedItems = groupBySede(list.items);
 
   return (
     <div>
       {Object.keys(groupedItems).map((sede) => {
-        const totals = calculateTotals(groupedItems[sede]); // Calcular totales
+        const totals = calculateTotals(groupedItems[sede]);
 
         return (
           <div key={sede}>
@@ -159,6 +158,7 @@ const calculateTotals = (items) => {
                 <TableColumn key="totalpagar">Total a Pagar</TableColumn>
                 <TableColumn key="saldopendiente">Saldo Pendiente</TableColumn>
                 <TableColumn key="observaciones">Observaciones</TableColumn>
+                <TableColumn key="actions">Acciones</TableColumn>
               </TableHeader>
               <TableBody
                 items={groupedItems[sede]}
@@ -202,7 +202,21 @@ const calculateTotals = (items) => {
                         return <TableCell>{formatCurrency(value)}</TableCell>;
                       }
 
-                      // Retorna el valor correspondiente o el valor original
+                      if (columnKey === "actions") {
+                        return (
+                          <TableCell>
+                            <button className="bg-lime-500  px-4 py-2 rounded-lg hover:bg-lime-600">
+                              <Link
+                                to={`/nominas/${item.uuid}/empleados/${item.empleado.uuid}`}
+                                className="text-white"
+                              >
+                                Editar
+                              </Link>
+                            </button>
+                          </TableCell>
+                        );
+                      }
+
                       return (
                         <TableCell>
                           {empleadoFields[columnKey] ?? value}

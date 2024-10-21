@@ -6,13 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { TextArea } from "./UI/TextArea";
 import { VarLoader } from "./UI/VarLoader";
 
-export const FormAddNomina = () => {
+export const FormEditNomina = () => {
   const fechaActual = new Date();
   const diaDelMes = fechaActual.getDate();
-  // Dias en los cuales se habilitara para el coordinador la carga de Nómina
-  const diasHabilitados = [1, 2, 3, 4, 15, 16, 17, 18,20, 21];
+  const diasHabilitados = [1, 2, 3, 4, 15, 16, 17, 18, 19, 20];
   const estaHabilitado = diasHabilitados.includes(diaDelMes);
-  //Datos heredados del empleado por Id
+
+  // Datos heredados del empleado por Id
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [cc, setCc] = useState("");
@@ -21,6 +21,7 @@ export const FormAddNomina = () => {
   const [numcuenta, setnumCuenta] = useState("");
   const [sede, setSede] = useState("");
   const [honomensual, setHonoMensual] = useState(0);
+  const [uuidNomina, setUuidNomina] = useState(""); // Guardará el UUID de la nómina
 
   // Datos de la nómina en particular
   let [honoquincena, setHonoquincena] = useState(0);
@@ -47,68 +48,12 @@ export const FormAddNomina = () => {
     useState(0);
   let [saldopendiente, setSaldoPendiente] = useState(0);
   const [observaciones, setObservaciones] = useState("");
-
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
   const [empleadoid, setEmpleadoId] = useState("");
 
-  //useEffect para manejar los cambio en el valor de honorarios por día
-  useEffect(() => {
-    if (honomensual > 0) {
-      setHonoDia(honomensual / 30);
-    }
-  }, [honomensual]);
-
-  //useEffect para manejar los cambio en el valor del saldo honorario quincenal
-  useEffect(() => {
-    if (honomensual > 0) {
-      setHonoquincena(honomensual / 2);
-    }
-  }, [honomensual]);
-
-  //useEffect para manejar los cambio en el valor del total a pagar
-  useEffect(() => {
-    if (
-      honoperiodoliquidacion &&
-      valortotalclasesapoyosena &&
-      valortotaldominicales &&
-      valortotalclasesinstructor &&
-      comicioninscripcionestudiante &&
-      deducciones
-    ) {
-      setTotalPagar(
-        honoperiodoliquidacion +
-          valortotalclasesapoyosena +
-          valortotaldominicales +
-          valortotalclasesinstructor +
-          comicioninscripcionestudiante -
-          deducciones
-      );
-    }
-  }, [
-    honoperiodoliquidacion,
-    valortotalclasesapoyosena,
-    valortotaldominicales,
-    valortotalclasesinstructor,
-    comicioninscripcionestudiante,
-    deducciones,
-  ]);
-
-  //useEffect para manejar los cambio en el valor del saldo pendiente
-  useEffect(() => {
-    if (totalpagar && pagosadicionalespendientes) {
-      setSaldoPendiente(totalpagar + pagosadicionalespendientes);
-    }
-  }, [totalpagar, pagosadicionalespendientes]);
-
-  //useEffect para manejar los cambio en el valor del honorario del periodo de liquidación
-  useEffect(() => {
-    if (honodia > 0 && totaldiasliquidar > 0) {
-      setHonoPeriodoLiquidacion(honodia * totaldiasliquidar);
-    }
-  }, [honodia, totaldiasliquidar]);
-
+  // Obtener el empleado por su ID y extraer el UUID de su nómina
   useEffect(() => {
     const getEmpleadoById = async () => {
       try {
@@ -124,6 +69,11 @@ export const FormAddNomina = () => {
         setnumCuenta(response.data.numcuenta);
         setHonoMensual(response.data.honomensual);
         setSede(response.data.sede);
+
+        // Verificar si el empleado tiene nóminas y obtener el UUID
+        if (response.data.nominas && response.data.nominas.length > 0) {
+          setUuidNomina(response.data.nominas[0].uuid); // Asignar el UUID de la primera nómina
+        }
       } catch (error) {
         if (error.response) {
           setMsg(error.response.data.msg);
@@ -133,33 +83,49 @@ export const FormAddNomina = () => {
     getEmpleadoById();
   }, [id]);
 
+  // Obtener la nómina por UUID
   useEffect(() => {
-    const getEmpleadoById = async () => {
+    const getNominaByUuid = async () => {
+      if (!uuidNomina) return; // Solo continuar si el uuidNomina está disponible
       try {
         const response = await axios.get(
-          `http://localhost:5000/empleados/${id}`
+          `http://localhost:5000/nominas/${uuidNomina}`
         );
-        setNombre(response.data.nombre);
-        setApellido(response.data.apellido);
-        setCc(response.data.cc);
-        setBanco(response.data.banco);
-        setCargo(response.data.cargo);
-        setnumCuenta(response.data.numcuenta);
-        setHonoMensual(response.data.honomensual);
-        setSede(response.data.sede);
+        const nomina = response.data;
+
+        // Asignar los valores directamente de la respuesta de la API
+        setHonoquincena(nomina.honoquincena);
+        setHonoDia(nomina.honodia);
+        setTotalDiasLiquidar(nomina.totaldiasliquidar);
+        setClasesApoyoSena(nomina.clasesapoyosena);
+        setValorClaseApoyoSena(nomina.valorclaseapoyosena);
+        setDiasDominicales(nomina.diasdominicales);
+        setValorDiaDominical(nomina.valordiadominical);
+        setClasesIntructor(nomina.clasesinstructor);
+        setValorClaseInstructor(nomina.valorclaseinstructor);
+        setTotalInscripcionesLiquidar(nomina.totalinscripcionesliquidar);
+        setValorComisionInscripcion(nomina.comicioninscripcionestudiante);
+        setValorTotalDominicales(nomina.valortotaldominicales);
+        setValorTotalClasesApoyoSena(nomina.valortotalclasesapoyosena);
+        setValorTotalClasesInstructor(nomina.valortotalclasesinstructor);
+        setTotalPagar(nomina.totalpagar);
+        setDeducciones(nomina.deducciones);
+        setSaldoPendiente(nomina.saldopendiente);
+        setObservaciones(nomina.observaciones);
       } catch (error) {
         if (error.response) {
           setMsg(error.response.data.msg);
         }
       }
     };
-    getEmpleadoById();
-  }, [id]);
 
-  const guardarNomina = async (e) => {
+    getNominaByUuid();
+  }, [uuidNomina]);
+
+  const actualizarNomina = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/nominas", {
+      await axios.patch(`http://localhost:5000/nominas/${uuidNomina}`, {
         empleadoId: empleadoid,
         honoquincena: honoquincena,
         honodia: honodia,
@@ -183,7 +149,6 @@ export const FormAddNomina = () => {
         saldopendiente: saldopendiente,
         observaciones: observaciones,
       });
-
       navigate("/nominas");
     } catch (error) {
       if (error.response) {
@@ -196,7 +161,7 @@ export const FormAddNomina = () => {
     <>
       {estaHabilitado ? (
         <div className="container_principal mx-auto p-4">
-          <form onSubmit={guardarNomina}>
+          <form onSubmit={actualizarNomina}>
             <p className="text-center text-xl">
               Información principal del empleado
             </p>
@@ -462,17 +427,7 @@ export const FormAddNomina = () => {
                 isDisabled
                 type="text"
                 label="Total a Pagar"
-                value={(totalpagar =
-                  honoperiodoliquidacion +
-                  valortotalclasesapoyosena +
-                  valortotaldominicales +
-                  valortotalclasesinstructor +
-                  comicioninscripcionestudiante -
-                  deducciones).toLocaleString("es-CO", {
-                  style: "currency",
-                  currency: "COP",
-                  minimumFractionDigits: 0,
-                })}
+                value={totalpagar}
                 onChange={(e) => setTotalPagar(e.target.value)}
               />
             </div>
@@ -508,15 +463,15 @@ export const FormAddNomina = () => {
               />
             </div>
 
-            <ButtonSingle textButton="Guardar Nómina" type="submit" />
+            <ButtonSingle textButton="Acttualizar Nómina" type="submit" />
             <p className="text-center text-red-500">{msg}</p>
           </form>
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center mt-40 text-center">
           <p className="mb-4">
-            Ups, el sistema no se encuentra habilitado para realizar la carga de
-            nóminas.
+            Ups, el sistema no se encuentra habilitado para realizar la
+            actualización de nóminas.
           </p>
           <VarLoader />
         </div>

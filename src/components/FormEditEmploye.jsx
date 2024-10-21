@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export const FormEditEmploye = () => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
-  const [nit, setNit] = useState("");
+  const [cc, setCc] = useState("");
   const [banco, setBanco] = useState("");
   const [numcuenta, setNunCuenta] = useState("");
   const [sede, setSede] = useState("");
@@ -28,7 +28,7 @@ export const FormEditEmploye = () => {
         );
         setNombre(response.data.nombre);
         setApellido(response.data.apellido);
-        setNit(response.data.nit);
+        setCc(response.data.cc);
         setBanco(response.data.banco);
         setNunCuenta(response.data.numcuenta);
         setSede(response.data.sede);
@@ -49,7 +49,7 @@ export const FormEditEmploye = () => {
       await axios.patch(`http://localhost:5000/empleados/${id}`, {
         nombre: nombre,
         apellido: apellido,
-        nit: nit,
+        cc: cc,
         banco: banco,
         numcuenta: numcuenta,
         sede: sede,
@@ -87,16 +87,16 @@ export const FormEditEmploye = () => {
             <InputSingle
               type="text"
               label="N° Documento"
-              value={nit}
-              onChange={(e) => setNit(e.target.value)}
+              value={cc}
+              onChange={(e) => setCc(e.target.value)}
             />
           </div>
           <div className="flex sm:flex-1 gap-4">
             <SelectInputBancos
               label={"Banco"}
               placeholder={"Seleccione un Banco"}
-              value={banco} // Mantener el valor seleccionado
-              onChange={(selected) => setBanco(selected.currentKey)} // Manejar el cambio
+              value={banco}
+              onChange={(selected) => setBanco(selected.currentKey)}
             />
             <InputSingle
               type="number"
@@ -111,13 +111,13 @@ export const FormEditEmploye = () => {
           <SelectInput
             label={"Sede a la que pertenece"}
             placeholder={"Seleccione una Sede"}
-            value={sede} // Mantener el valor seleccionado
-            onChange={(selected) => setSede(selected.currentKey)} // Manejar el cambio
+            value={sede}
+            onChange={(selected) => setSede(selected.currentKey)}
           />
           <SelectInputCargos
             label={"Cargo"}
             placeholder={"Seleccione un Cargo"}
-            value={cargo} // Mantener el valor seleccionado
+            value={cargo}
             onChange={(selected) => setCargo(selected.currentKey)} // Manejar el cambio
           />
           <InputSingle

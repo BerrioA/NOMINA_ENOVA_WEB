@@ -38,7 +38,7 @@ export const TableEmploye = () => {
   const deleteEmpleado = async (empleadoId) => {
     try {
       await axios.delete(`http://localhost:5000/empleados/${empleadoId}`);
-      getEmpleados(); // Recargar la lista de empleados después de eliminar
+      getEmpleados();
     } catch (error) {
       console.error("Error al eliminar empleado:", error);
     }
@@ -79,12 +79,10 @@ export const TableEmploye = () => {
         );
         
       case "actions":
-  // Verificar si el usuario es Coordinador antes de renderizar las acciones
   if (user && user.rol === "Coordinador") {
     
     return (
       <div className="relative flex items-center gap-2">
-        {/* Cargar Nómina */}
         <Tooltip content="Cargar Nómina">
           <Link to={`/empleados/${empleado.uuid}/nomina`}>
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
@@ -93,14 +91,12 @@ export const TableEmploye = () => {
           </Link>
         </Tooltip>
 
-        {/* Ver Detalles */}
         <Tooltip content="Details">
           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
             <EyeIcon />
           </span>
         </Tooltip>
 
-        {/* Editar Usuario */}
         <Tooltip content="Editar Usuario">
           <Link to={`/empleados/editar/${empleado.uuid}`}>
             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
@@ -109,7 +105,6 @@ export const TableEmploye = () => {
           </Link>
         </Tooltip>
 
-        {/* Eliminar Empleado */}
         <Tooltip color="danger" content="Eliminar Empleado">
           <span
             className="text-lg text-danger cursor-pointer active:opacity-50"
@@ -122,7 +117,7 @@ export const TableEmploye = () => {
     );
   }
 
-  return null; // Si no es "Coordinador", no retorna nada
+  return null;
 
       default:
         return empleado[columnKey];

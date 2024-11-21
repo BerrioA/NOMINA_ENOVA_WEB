@@ -14,6 +14,8 @@ import { AddCoordinator } from "./pages/AddCoordinator";
 import { EditCoordinador } from "./pages/EditCoordinador";
 import { UploadNomina } from "./pages/UploadNomina";
 import { EditNomina } from "./pages/EditNomina";
+import { Help } from "./pages/Help";
+import { Sites } from "./pages/Sites";
 
 function App() {
   return (
@@ -33,10 +35,10 @@ function App() {
           <Route path="/administrador/agregar" element={<AddAdmin />} />
           <Route path="/administrador/editar/:id" element={<EditAdmin />} />
           <Route path="/coordinador/agregar" element={<AddCoordinator />} />
-          <Route path="/coordinador/editar/:id" element={<EditCoordinador />} />
+          <Route path="/coordinador/editar/:id/" element={<EditCoordinador />} />
           <Route path="/empleados/:id/nomina" element={<UploadNomina />} />
-          <Route path="/ajustes" element={<EditEmploye />} />
-          <Route path="/ayuda" element={<EditEmploye />} />
+          <Route path="/sedes" element={<Sites />} />
+          <Route path="/ayuda" element={<Help />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ButtonSingle from "./UI/ButtonSingle";
 import InputSingle from "./UI/InputSingle";
 import SelectInputBancos from "./UI/SelectInputBanco";
@@ -17,6 +17,25 @@ export const FormAddEmploye = () => {
   const [cargo, setCargo] = useState("");
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+  const [setCargosOptions] = useState([]);
+
+  // Obtener las sedes desde la API sin necesidad de importar servicios externos
+  useEffect(() => {
+    const fetchCargos = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/cargos");
+        const options = response.data.map((cargo) => ({
+          key: cargo.uuid,
+          label: cargo.nombrecargo,
+          value: cargo.uuid,
+        }));
+        setCargosOptions(options);
+      } catch (error) {
+        console.error("Error al obtener los cargos:", error);
+      }
+    };
+    fetchCargos();
+  }, []);
 
   const guardarEmpleado = async (e) => {
     e.preventDefault();
@@ -93,7 +112,7 @@ export const FormAddEmploye = () => {
             label={"Cargo"}
             placeholder={"Seleccione un Cargo"}
             value={cargo}
-            onChange={(selected) => setCargo(selected.currentKey)}
+            onChange={setCargo}
           />
         </div>
         <ButtonSingle type="submit" textButton="Guardar Empleado" />

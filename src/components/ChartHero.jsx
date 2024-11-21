@@ -19,24 +19,17 @@ export const ChartHero = () => {
     try {
       const response = await axios.get("http://localhost:5000/nominas");
 
-      // Agrupamos los datos por sede y sumamos los valores de cada campo
+      // Agrupamos los datos por sede y periodo
       const groupedData = response.data.reduce((acc, curr) => {
-        const { sede } = curr.empleado;
+        const { sede, periodo } = curr;
         if (!acc[sede]) {
-          acc[sede] = {
-            sede,
-            totalHonoQuincena: 0,
-            totalDiasLiquidar: 0,
-            totalPagar: 0,
-          };
+          acc[sede] = { sede, periodo1: 0, periodo2: 0 };
         }
-        acc[sede].totalHonoQuincena += parseFloat(curr.honoquincena);
-        acc[sede].totalDiasLiquidar += curr.totaldiasliquidar;
-        acc[sede].totalPagar += parseFloat(curr.totalpagar);
+        acc[sede][`periodo${periodo}`] += parseFloat(curr.totalpagar);
         return acc;
       }, {});
 
-      // Convertimos el objeto en un array para que pueda ser usado por Recharts
+      // Convertimos el objeto en un array para Recharts
       const formattedData = Object.values(groupedData);
       setData(formattedData);
     } catch (error) {
@@ -44,7 +37,7 @@ export const ChartHero = () => {
     }
   };
 
-  // Llamada a fetchData cuando se monta el componente
+  // Llamada a fetchData al montar el componente
   useEffect(() => {
     fetchData();
   }, []);
@@ -52,7 +45,7 @@ export const ChartHero = () => {
   return (
     <div className="p-2 bg-zinc-100 rounded-lg">
       <h4 className="text-sm font-bold text-center mb-2">
-        Resumen de Nóminas por Sede
+        Comparación de Nóminas por Sede y Periodo
       </h4>
 
       <div className="mt-2">
@@ -68,18 +61,19 @@ export const ChartHero = () => {
             <Tooltip />
             <Area
               type="monotone"
-              dataKey="totalHonoQuincena"
-              stroke="#038604"
-              fill="#038604"
-              name="Honorarios Quincena"
+              dataKey="periodo1"
+              stroke="#007bff"
+              fill="#007bff"
+              name="Periodo 1"
               stackId="1"
             />
             <Area
               type="monotone"
-              dataKey="totalPagar"
-              stroke="#4ee100"
-              fill="#4ee100"
-              name="Total a Pagar"
+              dataKey="periodo2"
+              stroke="#ff5733"
+              fill="#ff5733"
+              name="Periodo 2"
+              stackId="1"
             />
           </AreaChart>
         </ResponsiveContainer>

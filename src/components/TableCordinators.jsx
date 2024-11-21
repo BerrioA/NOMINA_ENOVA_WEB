@@ -11,17 +11,19 @@ import {
 } from "@nextui-org/react";
 import { EditIcon } from "./UI/EditIcon";
 import { DeleteIcon } from "./UI/DeleteIcon";
-import { EyeIcon } from "./UI/EyeIcon";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { AddIcon } from "./UI/AddIcon";
 
 export const TableCordinators = () => {
   const [coordinadores, setCoordinadores] = useState([]);
+  const [sedeNames, setSedeNames] = useState({});
+  const [setCargoNames] = useState({});
 
   useEffect(() => {
     getCoordinadores();
+    getSedeNames();
+    getCargoNames();
   }, []);
 
   const getCoordinadores = async () => {
@@ -29,7 +31,33 @@ export const TableCordinators = () => {
       const response = await axios.get("http://localhost:5000/coordinadores");
       setCoordinadores(response.data);
     } catch (error) {
-      console.error("Error al optener coordinadores:", error);
+      console.error("Error al obtener coordinadores:", error);
+    }
+  };
+
+  const getSedeNames = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/sedes");
+      const sedes = response.data.reduce((acc, sede) => {
+        acc[sede.uuid] = sede.nombresede;
+        return acc;
+      }, {});
+      setSedeNames(sedes);
+    } catch (error) {
+      console.error("Error al obtener sedes:", error);
+    }
+  };
+
+  const getCargoNames = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/cargos");
+      const cargos = response.data.reduce((acc, cargo) => {
+        acc[cargo.uuid] = cargo.nombrecargo;
+        return acc;
+      }, {});
+      setCargoNames(cargos);
+    } catch (error) {
+      console.error("Error al obtener cargos:", error);
     }
   };
 
@@ -38,9 +66,9 @@ export const TableCordinators = () => {
       await axios.delete(
         `http://localhost:5000/coordinadores/${coordinadorId}`
       );
-      getCoordinadores(); // Recargar la lista de empleados después de eliminar
+      getCoordinadores();
     } catch (error) {
-      console.error("Error al eliminar administrador:", error);
+      console.error("Error al eliminar coordinador:", error);
     }
   };
 
@@ -56,13 +84,12 @@ export const TableCordinators = () => {
       case "cargo":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{coordinador.rol}</p>
             <p className="text-bold text-sm capitalize text-default-400">
-              {coordinador.sede}
+              {sedeNames[coordinador.sede] || "Cargando..."}
             </p>
           </div>
         );
-      case "banco":
+      case "rol":
         return (
           <Chip className="capitalize" size="sm" variant="flat">
             {coordinador.rol}
@@ -71,16 +98,6 @@ export const TableCordinators = () => {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Cargar Nómina">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <AddIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
             <Tooltip content="Editar Usuario">
               <Link to={`/coordinador/editar/${coordinador.uuid}`}>
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
@@ -89,7 +106,7 @@ export const TableCordinators = () => {
               </Link>
             </Tooltip>
 
-            <Tooltip color="danger" content="Eliminar Administrador">
+            <Tooltip color="danger" content="Eliminar Coordinador">
               <span
                 className="text-lg text-danger cursor-pointer active:opacity-50"
                 onClick={() => deleteCoordinador(coordinador.uuid)}
@@ -107,12 +124,13 @@ export const TableCordinators = () => {
   const columns = [
     { uid: "nombre", name: "Nombre" },
     { uid: "correo", name: "Correo" },
-    { uid: "sede", name: "Sede" },
+    { uid: "cargo", name: "Sede" },
+    { uid: "rol", name: "Rol" },
     { uid: "actions", name: "Acciones" },
   ];
 
   return (
-    <Table aria-label="Tabla de Administradores">
+    <Table aria-label="Tabla de Coordinadores">
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn

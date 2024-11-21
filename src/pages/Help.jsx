@@ -1,15 +1,15 @@
 import { Layout } from "./Layout";
-import ListNominas from "../components/ListNominas";
-import { WelcomeAndText } from "../components/UI/WelcomeAndText";
-import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../services/AuthSlice";
+import { InfoHelp } from "../components/InfoHelp";
 
-export const Nomina = () => {
+export const Help = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isError } = useSelector((state) => state.auth);
+  const { isError, user } = useSelector((state) => state.auth);
+
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
@@ -18,12 +18,14 @@ export const Nomina = () => {
     if (isError) {
       navigate("/");
     }
-  }, [isError, navigate]);
+    if (user && user.rol !== "Administrador") {
+      navigate("/dashboard");
+    }
+  }, [isError, user, navigate]);
 
-return (
+  return (
     <Layout>
-      <WelcomeAndText title="Nóminas" Subtitle="Listado de nóminas." />
-      <ListNominas />
+      <InfoHelp />
     </Layout>
   );
 };

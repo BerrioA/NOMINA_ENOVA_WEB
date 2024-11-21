@@ -2,12 +2,12 @@ import {
   BarChart3,
   Receipt,
   LayoutDashboard,
-  Settings,
   LifeBuoy,
   UserCircle,
   UserRoundCog,
   UsersRound,
   LogOut,
+  MapPinHouse,
 } from "lucide-react";
 import {
   SideBar,
@@ -56,6 +56,7 @@ export const ItemsSidebar = () => {
             text="Coordinadores"
             to="/coordinadores"
           />
+          <SidebarItem icon={<MapPinHouse size={20} />} text="Sedes" to="/sedes" />
         </div>
       )}
       <SidebarItem
@@ -65,11 +66,6 @@ export const ItemsSidebar = () => {
       />
 
       <hr className="my-3" />
-      <SidebarItem
-        icon={<Settings size={20} />}
-        text="Ajustes"
-        to="/ajustes"
-      />
       <SidebarItem icon={<LifeBuoy size={20} />} text="Ayuda" to="/ayuda" />
       <SidebarItem
         icon={<LogOut size={20} />}

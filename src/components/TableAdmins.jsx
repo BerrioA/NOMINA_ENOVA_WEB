@@ -11,11 +11,9 @@ import {
 } from "@nextui-org/react";
 import { EditIcon } from "./UI/EditIcon";
 import { DeleteIcon } from "./UI/DeleteIcon";
-import { EyeIcon } from "./UI/EyeIcon";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { AddIcon } from "./UI/AddIcon";
 
 export const TableAdmins = () => {
   const [administradores, setAdministradores] = useState([]);
@@ -73,16 +71,6 @@ export const TableAdmins = () => {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Cargar Nómina">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <AddIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
             <Tooltip content="Editar Usuario">
               <Link to={`/administrador/editar/${administrador.uuid}`}>
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">

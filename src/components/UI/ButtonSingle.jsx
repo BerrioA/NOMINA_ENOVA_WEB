@@ -15,7 +15,7 @@ export default function ButtonSingle({
         variant="shadow"
         type={type}
         onClick={onClick}
-        className="button is-success is-fullwidth bg-purple-700 mt-2"
+        className="button is-success is-fullwidth bg-[#038604] mt-2"
       >
         {icon && <span>{icon}</span>}
         {children || textButton}

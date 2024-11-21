@@ -1,7 +1,7 @@
 import ButtonSingle from "./UI/ButtonSingle";
 import InputSingle from "./UI/InputSingle";
 import SelectInput from "./UI/SelectInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SelectInputCargos from "./UI/SelectInputCargo";
@@ -16,20 +16,58 @@ export const FormAddCoordinator = () => {
   const [rol, setRol] = useState("Coordinador");
   const [cargo, setCargo] = useState("");
   const [msg, setMsg] = useState("");
+  const [setSedesOptions] = useState([]);
+  const [setCargosOptions] = useState([]);
   const navigate = useNavigate();
+
+  // Obtener las sedes desde la API sin necesidad de importar servicios externos
+  useEffect(() => {
+    const fetchSedes = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/sedes/");
+        const options = response.data.map((sede) => ({
+          key: sede.uuid,
+          label: sede.nombresede,
+          value: sede.uuid,
+        }));
+        setSedesOptions(options);
+      } catch (error) {
+        console.error("Error al obtener las sedes:", error);
+      }
+    };
+    fetchSedes();
+  }, []);
+
+  // Obtener las sedes desde la API sin necesidad de importar servicios externos
+  useEffect(() => {
+    const fetchCargos = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/cargos");
+        const options = response.data.map((cargo) => ({
+          key: cargo.uuid,
+          label: cargo.nombrecargo,
+          value: cargo.uuid,
+        }));
+        setCargosOptions(options);
+      } catch (error) {
+        console.error("Error al obtener los cargos:", error);
+      }
+    };
+    fetchCargos();
+  }, []);
 
   const guardarCoordinador = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/coordinadores", {
-        nombre: nombre,
-        apellido: apellido,
-        correo: correo,
-        password: password,
-        confPassword: confPassword,
-        sede: sede,
-        rol: rol,
-        cargo: cargo,
+        nombre,
+        apellido,
+        correo,
+        password,
+        confPassword,
+        sede,
+        rol,
+        cargo,
       });
       navigate("/coordinadores");
     } catch (error) {
@@ -66,17 +104,17 @@ export const FormAddCoordinator = () => {
             onChange={(e) => setRol(e.target.value)}
           />
           <SelectInput
-            Disable
-            label={"Sede a la que pertenece"}
-            placeholder={"Seleccione una Sede"}
+            label="Sede a la que pertenece"
+            placeholder="Seleccione una Sede"
             value={sede}
-            onChange={(selected) => setSede(selected.currentKey)}
+            onChange={setSede}
           />
+
           <SelectInputCargos
             label={"Cargo"}
             placeholder={"Seleccione un Cargo"}
-            value={cargo} // Cambiado de rol a cargo
-            onChange={(selected) => setCargo(selected.currentKey)} // Manejar el cambio de cargo
+            value={cargo}
+            onChange={setCargo}
           />
         </div>
         <InputSingle

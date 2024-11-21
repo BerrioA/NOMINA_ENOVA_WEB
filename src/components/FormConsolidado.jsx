@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -18,6 +18,25 @@ import ButtonPDF from "./UI/ButtonPDF";
 export default function Formconsolidado() {
   const [setIsLoading] = React.useState(true);
   const [hasMore, setHasMore] = React.useState(false);
+  const [cargoNames, setCargoNames] = useState({});
+
+  useEffect(() => {
+    // Cargar los nombres de los cargos y mapearlos por UUID
+    const fetchCargos = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/cargos");
+        const cargosData = response.data;
+        const cargosMap = cargosData.reduce((acc, cargo) => {
+          acc[cargo.uuid] = cargo.nombrecargo;
+          return acc;
+        }, {});
+        setCargoNames(cargosMap);
+      } catch (error) {
+        console.error("Error al cargar los nombres de cargos:", error);
+      }
+    };
+    fetchCargos();
+  }, []);
 
   let list = useAsyncList({
     async load({ signal, cursor }) {
@@ -50,13 +69,12 @@ export default function Formconsolidado() {
     onLoadMore: list.loadMore,
   });
 
-  // Función para formatear en pesos colombianos
   const formatCurrency = (value) => {
     if (typeof value === "number") {
       return value.toLocaleString("es-CO", {
         style: "currency",
         currency: "COP",
-        minimumFractionDigits: 0, // Puedes ajustar esto si deseas decimales
+        minimumFractionDigits: 0,
       });
     }
     return value;
@@ -74,7 +92,6 @@ export default function Formconsolidado() {
     };
 
     list.items.forEach((item) => {
-      // Asegurarse de sumar los valores numéricos
       total.honoquincena += Number(item.honoquincena) || 0;
       total.honodia += Number(item.honodia) || 0;
       total.valortotaldominicales += Number(item.valortotaldominicales) || 0;
@@ -140,12 +157,12 @@ export default function Formconsolidado() {
               {(columnKey) => {
                 const value = getKeyValue(item, columnKey);
 
-                // Mapa de columnas a propiedades de empleado
                 const empleadoFields = {
                   nombre: `${item.empleado?.nombre ?? ""} ${
                     item.empleado?.apellido ?? ""
                   }`,
-                  cargo: item.empleado?.cargo,
+                  cargo:
+                    cargoNames[item.empleado?.cargo] || item.empleado?.cargo,
                   cc: item.empleado?.cc,
                   banco: item.empleado?.banco,
                   numcuenta: item.empleado?.numcuenta,
@@ -173,7 +190,6 @@ export default function Formconsolidado() {
                   return <TableCell>{formatCurrency(value)}</TableCell>;
                 }
 
-                // Retorna el valor correspondiente o el valor original
                 return (
                   <TableCell>{empleadoFields[columnKey] ?? value}</TableCell>
                 );
@@ -182,7 +198,6 @@ export default function Formconsolidado() {
           )}
         </TableBody>
       </Table>
-      {/* Fila con totales */}
       <div className="w-full bg-gray-100 p-2 mt-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-7 gap-4 font-semibold">
           <span>Total Quincenal: {formatCurrency(totals.honoquincena)}</span>

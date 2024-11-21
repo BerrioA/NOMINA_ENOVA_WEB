@@ -9,7 +9,7 @@ import { VarLoader } from "./UI/VarLoader";
 export const FormEditNomina = () => {
   const fechaActual = new Date();
   const diaDelMes = fechaActual.getDate();
-  const diasHabilitados = [1, 2, 3, 4, 15, 16, 17, 21];
+  const diasHabilitados = [1, 2, 3, 4, 5, 15, 16, 17, 18, 19];
   const estaHabilitado = diasHabilitados.includes(diaDelMes);
 
   // Datos heredados del empleado por Id

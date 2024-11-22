@@ -20,20 +20,56 @@ import { useSelector } from "react-redux";
 
 export const TableEmploye = () => {
   const [empleados, setEmpleados] = useState([]);
+  const [cargos, setCargos] = useState([]);
+  const [sedes, setSedes] = useState([]);
   const { user } = useSelector((state) => state.auth);
+
   useEffect(() => {
-    getEmpleados();
+    getCargos();
+    getSedes();
   }, []);
+
+  useEffect(() => {
+    if (cargos.length > 0 && sedes.length > 0) {
+      getEmpleados();
+    }
+  }, [cargos, sedes]);
 
   const getEmpleados = async () => {
     try {
       const response = await axios.get("http://localhost:5000/empleados");
-      setEmpleados(response.data);
+      const empleadosConDetalles = response.data.map((empleado) => ({
+        ...empleado,
+        cargoNombre:
+          cargos.find((cargo) => cargo.uuid === empleado.cargo)?.nombrecargo ||
+          "N/A",
+        sedeNombre:
+          sedes.find((sede) => sede.uuid === empleado.sede)?.nombresede ||
+          "N/A",
+      }));
+      setEmpleados(empleadosConDetalles);
     } catch (error) {
       console.error("Error fetching empleados:", error);
     }
   };
 
+  const getCargos = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/cargos");
+      setCargos(response.data);
+    } catch (error) {
+      console.error("Error fetching cargos:", error);
+    }
+  };
+
+  const getSedes = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/sedes");
+      setSedes(response.data);
+    } catch (error) {
+      console.error("Error fetching sedes:", error);
+    }
+  };
 
   const deleteEmpleado = async (empleadoId) => {
     try {
@@ -50,15 +86,17 @@ export const TableEmploye = () => {
         return (
           <User
             name={`${empleado.nombre} ${empleado.apellido}`}
-            description={empleado.cargo}
+            description={empleado.cargoNombre}
           />
         );
       case "cargo":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{empleado.cargo}</p>
+            <p className="text-bold text-sm capitalize">
+              {empleado.cargoNombre}
+            </p>
             <p className="text-bold text-sm capitalize text-default-400">
-              {empleado.sede}
+              {empleado.sedeNombre}
             </p>
           </div>
         );
@@ -77,47 +115,45 @@ export const TableEmploye = () => {
             }).format(empleado.honomensual)}
           </p>
         );
-        
+
       case "actions":
-  if (user && user.rol === "Coordinador") {
-    
-    return (
-      <div className="relative flex items-center gap-2">
-        <Tooltip content="Cargar Nómina">
-          <Link to={`/empleados/${empleado.uuid}/nomina`}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <AddIcon />
-            </span>
-          </Link>
-        </Tooltip>
+        if (user && user.rol === "Coordinador") {
+          return (
+            <div className="relative flex items-center gap-2">
+              <Tooltip content="Cargar Nómina">
+                <Link to={`/empleados/${empleado.uuid}/nomina`}>
+                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                    <AddIcon />
+                  </span>
+                </Link>
+              </Tooltip>
 
-        <Tooltip content="Details">
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-            <EyeIcon />
-          </span>
-        </Tooltip>
+              <Tooltip content="Details">
+                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                  <EyeIcon />
+                </span>
+              </Tooltip>
 
-        <Tooltip content="Editar Usuario">
-          <Link to={`/empleados/editar/${empleado.uuid}`}>
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <EditIcon />
-            </span>
-          </Link>
-        </Tooltip>
+              <Tooltip content="Editar Usuario">
+                <Link to={`/empleados/editar/${empleado.uuid}`}>
+                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                    <EditIcon />
+                  </span>
+                </Link>
+              </Tooltip>
 
-        <Tooltip color="danger" content="Eliminar Empleado">
-          <span
-            className="text-lg text-danger cursor-pointer active:opacity-50"
-            onClick={() => deleteEmpleado(empleado.uuid)}
-          >
-            <DeleteIcon />
-          </span>
-        </Tooltip>
-      </div>
-    );
-  }
-
-  return null;
+              <Tooltip color="danger" content="Eliminar Empleado">
+                <span
+                  className="text-lg text-danger cursor-pointer active:opacity-50"
+                  onClick={() => deleteEmpleado(empleado.uuid)}
+                >
+                  <DeleteIcon />
+                </span>
+              </Tooltip>
+            </div>
+          );
+        }
+        return null;
 
       default:
         return empleado[columnKey];

@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -13,10 +13,46 @@ import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import { useAsyncList } from "@react-stately/data";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import FilterForm from "./FilterForm";
 
 export default function ListNominas() {
-  const [setIsLoading] = React.useState(true);
-  const [hasMore, setHasMore] = React.useState(false);
+  const [setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [sedeNames, setSedeNames] = useState({});
+  const [cargoNames, setCargoNames] = useState({});
+
+  useEffect(() => {
+    // Cargar nombres de las sedes
+    const fetchSedeNames = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/sedes");
+        const namesMap = res.data.reduce((acc, sede) => {
+          acc[sede.uuid] = sede.nombresede;
+          return acc;
+        }, {});
+        setSedeNames(namesMap);
+      } catch (error) {
+        console.error("Error al cargar nombres de las sedes:", error);
+      }
+    };
+
+    // Cargar nombres de los cargos
+    const fetchCargoNames = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/cargos");
+        const namesMap = res.data.reduce((acc, cargo) => {
+          acc[cargo.uuid] = cargo.nombrecargo;
+          return acc;
+        }, {});
+        setCargoNames(namesMap);
+      } catch (error) {
+        console.error("Error al cargar nombres de los cargos:", error);
+      }
+    };
+
+    fetchSedeNames();
+    fetchCargoNames();
+  }, []);
 
   let list = useAsyncList({
     async load({ signal, cursor }) {
@@ -30,7 +66,6 @@ export default function ListNominas() {
         });
 
         const items = Array.isArray(res.data) ? res.data : [res.data];
-
         setHasMore(false);
 
         return {
@@ -79,7 +114,7 @@ export default function ListNominas() {
       (acc, item) => {
         acc.honomensual += Number(item.empleado?.honomensual || 0);
         acc.honoquincena += Number(item.honoquincena || 0);
-        acc.honodia += Number(item.honodia || 0); // Asegúrate de que esto sea un número
+        acc.honodia += Number(item.honodia || 0);
         acc.totaldiasliquidar += Number(item.totaldiasliquidar || 0);
         acc.valortotaldominicales += Number(item.valortotaldominicales || 0);
         acc.valortotalclasesinstructor += Number(
@@ -96,7 +131,7 @@ export default function ListNominas() {
       {
         honomensual: 0,
         honoquincena: 0,
-        honodia: 0, // Inicializado como número
+        honodia: 0,
         totaldiasliquidar: 0,
         valortotaldominicales: 0,
         valortotalclasesinstructor: 0,
@@ -109,17 +144,31 @@ export default function ListNominas() {
 
   const groupedItems = groupBySede(list.items);
 
+    const handleFilter = async (filters) => {
+      try {
+        const response = await axios.get("http://localhost:5000/nominas", {
+          params: filters,
+        });
+        list.setItems(response.data);
+      } catch (error) {
+        console.error("Error al filtrar:", error);
+      }
+    };
+
+
   return (
     <div>
+      <FilterForm onFilter={handleFilter} />
       {Object.keys(groupedItems).map((sede) => {
         const totals = calculateTotals(groupedItems[sede]);
+        const sedeName = sedeNames[sede] || "Sin sede"; // Obtener el nombre de la sede o usar "Sin sede"
 
         return (
           <div key={sede}>
-            <h3 className="text-lg font-semibold mb-4 mt-6">Sede {sede}</h3>
+            <h3 className="text-lg font-semibold mb-4 mt-6">Sede {sedeName}</h3>
             <Table
               isHeaderSticky
-              aria-label={`Tabla de nóminas para la sede ${sede}`}
+              aria-label={`Tabla de nóminas para la sede ${sedeName}`}
               baseRef={scrollerRef}
               bottomContent={
                 hasMore ? (
@@ -174,7 +223,7 @@ export default function ListNominas() {
                         nombre: `${item.empleado?.nombre ?? ""} ${
                           item.empleado?.apellido ?? ""
                         }`,
-                        cargo: item.empleado?.cargo,
+                        cargo: cargoNames[item.empleado?.cargo] || "Sin cargo", // Mostrar el nombre del cargo
                         cc: item.empleado?.cc,
                         banco: item.empleado?.banco,
                         numcuenta: item.empleado?.numcuenta,
@@ -205,7 +254,7 @@ export default function ListNominas() {
                       if (columnKey === "actions") {
                         return (
                           <TableCell>
-                            <button className="bg-lime-500  px-4 py-2 rounded-lg hover:bg-lime-600">
+                            <button className="bg-lime-500 px-4 py-2 rounded-lg hover:bg-lime-600">
                               <Link
                                 to={`/nominas/${item.uuid}/empleados/${item.empleado.uuid}`}
                                 className="text-white"
@@ -229,51 +278,68 @@ export default function ListNominas() {
             </Table>
 
             {/* Mostrar totales debajo de la tabla */}
-            <div className="mt-1">
-              <Table
-                aria-label={`Totales para Sede ${sede}`}
-                isHeaderSticky
-                bordered
-                classNames={{
-                  table: "min-w-full border rounded-lg overflow-hidden",
-                  header: "bg-blue-500 text-white",
-                }}
-              >
-                <TableHeader>
-                  <TableColumn>Honorarios Mensual</TableColumn>
-                  <TableColumn>Honorarios Quincenal</TableColumn>
-                  <TableColumn>Honorarios Día</TableColumn>
-                  <TableColumn>Total Días a Liquidar</TableColumn>
-                  <TableColumn>Total Dominicales</TableColumn>
-                  <TableColumn>Valor Total Clases Instructores</TableColumn>
-                  <TableColumn>Comisión Inscripciones Estudiantes</TableColumn>
-                  <TableColumn>Total a Pagar</TableColumn>
-                  <TableColumn>Saldo Pendiente</TableColumn>
-                </TableHeader>
-                <TableBody>
-                  <TableRow key={`totales-sede-${sede}`}>
-                    <TableCell>{formatCurrency(totals.honomensual)}</TableCell>
-                    <TableCell>{formatCurrency(totals.honoquincena)}</TableCell>
-                    <TableCell>{formatCurrency(totals.honodia)}</TableCell>
-                    <TableCell>{totals.totaldiasliquidar}</TableCell>
-                    <TableCell>
-                      {formatCurrency(totals.valortotaldominicales)}
-                    </TableCell>
-                    <TableCell>
-                      {formatCurrency(totals.valortotalclasesinstructor)}
-                    </TableCell>
-                    <TableCell>
-                      {formatCurrency(totals.comicioninscripcionestudiante)}
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      {formatCurrency(totals.totalpagar)}
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      {formatCurrency(totals.saldopendiente)}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+            <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+              <h4 className="font-semibold text-lg mb-2">Totales:</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">Honorarios Mes:</span>
+                  <span className="text-right text-green-600 font-semibold">
+                    {formatCurrency(totals.honomensual)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">Honorarios Quincenal:</span>
+                  <span className="text-right text-green-600 font-semibold">
+                    {formatCurrency(totals.honoquincena)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">Honorarios Día:</span>
+                  <span className="text-right text-green-600 font-semibold">
+                    {formatCurrency(totals.honodia)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">Total Días a Liquidar:</span>
+                  <span className="text-right text-gray-700 font-semibold">
+                    {totals.totaldiasliquidar}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">Total Dominicales:</span>
+                  <span className="text-right text-green-600 font-semibold">
+                    {formatCurrency(totals.valortotaldominicales)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">
+                    Valor Total Clases Instructores:
+                  </span>
+                  <span className="text-right text-green-600 font-semibold">
+                    {formatCurrency(totals.valortotalclasesinstructor)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">
+                    Comisión Inscripciones Estudiantes:
+                  </span>
+                  <span className="text-right text-green-600 font-semibold">
+                    {formatCurrency(totals.comicioninscripcionestudiante)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">Total a Pagar:</span>
+                  <span className="text-right text-green-600 font-semibold">
+                    {formatCurrency(totals.totalpagar)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded shadow">
+                  <span className="font-medium">Saldo Pendiente:</span>
+                  <span className="text-right text-red-600 font-semibold">
+                    {formatCurrency(totals.saldopendiente)}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         );

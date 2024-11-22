@@ -7,8 +7,8 @@ import {
 } from "@nextui-org/react";
 import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import LogoEnova from "../../../assets/images/LogoS.png";
-import LogoDeveloper from "../../../assets/images/AB.jpg";
+import LogoEnova from "../../../assets/images/LogoSigenGreen.png";
+import LogoDeveloper from "../../../assets/images/LogoSigenGreen.png";
 import { useContext, createContext, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LogOut as LogoutAction, reset } from "../../../services/AuthSlice";
@@ -18,7 +18,7 @@ const SidebarContext = createContext();
 export const SideBar = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const { user } = useSelector((state) => state.auth);
 
   const Logout = () => {
@@ -122,8 +122,8 @@ export function SidebarItem({ icon, text, active, alert, to, onClick }) {
         transition-colors group
         ${
           active
-            ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-            : "hover:bg-indigo-50 hover:z-10 text-gray-600"
+            ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-[#038604]"
+            : "hover:bg-[#daffcc] hover:z-10 text-gray-600"
         }
       `}
       onClick={handleClick}
@@ -154,7 +154,7 @@ export function SidebarItem({ icon, text, active, alert, to, onClick }) {
 
       {alert && (
         <div
-          className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
+          className={`absolute right-2 w-2 h-2 rounded bg-[#038604] ${
             expanded ? "" : "top-2"
           }`}
         />
@@ -163,7 +163,7 @@ export function SidebarItem({ icon, text, active, alert, to, onClick }) {
       {!expanded && (
         <div
           className={`absolute left-full rounded-md px-2 py-1 ml-6
-          bg-indigo-100 text-indigo-800 text-sm
+          bg-indigo-100 text-[#038604] text-sm
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
         >

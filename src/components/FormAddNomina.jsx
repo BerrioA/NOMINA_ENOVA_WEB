@@ -10,7 +10,7 @@ export const FormAddNomina = () => {
   const fechaActual = new Date();
   const diaDelMes = fechaActual.getDate();
   // Dias en los cuales se habilitara para el coordinador la carga de Nómina
-  const diasHabilitados = [1, 2, 3, 4, 15, 16, 17, 18,20, 21];
+  const diasHabilitados = [1, 2, 3, 4, 5,6,7, 8, 9, 15, 16, 17, 18, 19];
   const estaHabilitado = diasHabilitados.includes(diaDelMes);
   //Datos heredados del empleado por Id
   const [nombre, setNombre] = useState("");
@@ -184,7 +184,7 @@ export const FormAddNomina = () => {
         observaciones: observaciones,
       });
 
-      navigate("/nominas");
+      navigate("/empleados");
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);

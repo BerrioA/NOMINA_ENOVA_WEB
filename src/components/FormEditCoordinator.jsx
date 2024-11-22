@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const FormEditCoordinator = () => {
-
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [correo, setCorreo] = useState("");
@@ -16,10 +15,12 @@ export const FormEditCoordinator = () => {
   const [sede, setSede] = useState("");
   const [rol, setRol] = useState("Coordinador");
   const [msg, setMsg] = useState("");
+  const [sedesOptions, setSedesOptions] = useState([]); // Cambié el nombre de 'setSedesOptions' a 'sedesOptions' aquí.
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
+    // Obtener los datos del coordinador
     const getCoordinadorById = async () => {
       try {
         const response = await axios.get(
@@ -31,7 +32,7 @@ export const FormEditCoordinator = () => {
         setPassword(response.data.password);
         setConfPassword(response.data.confPassword);
         setCargo(response.data.cargo);
-        setSede(response.data.sede);
+        setSede(response.data.sede); // Sede UUID
         setRol(response.data.rol);
       } catch (error) {
         if (error.response) {
@@ -42,18 +43,38 @@ export const FormEditCoordinator = () => {
     getCoordinadorById();
   }, [id]);
 
+  useEffect(() => {
+    // Obtener las opciones de sedes
+    const fetchSedes = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/sedes/${id}/`
+        );
+        const options = response.data.map((sede) => ({
+          key: sede.uuid,
+          label: sede.nombresede,
+          value: sede.uuid,
+        }));
+        setSedesOptions(options);
+      } catch (error) {
+        console.error("Error al obtener las sedes:", error);
+      }
+    };
+    fetchSedes();
+  }, []);
+
   const actualizarCoordinador = async (e) => {
     e.preventDefault();
     try {
       await axios.patch(`http://localhost:5000/coordinadores/${id}`, {
-        nombre: nombre,
-        apellido: apellido,
-        correo: correo,
-        password: password,
-        confPassword: confPassword,
-        cargo: cargo,
-        sede: sede,
-        rol: rol,
+        nombre,
+        apellido,
+        correo,
+        password,
+        confPassword,
+        cargo,
+        sede, // Enviar el UUID de la sede
+        rol,
       });
       navigate("/coordinadores");
     } catch (error) {
@@ -96,10 +117,11 @@ export const FormEditCoordinator = () => {
             onChange={(e) => setRol(e.target.value)}
           />
           <SelectInput
-            label={"Cargo"}
-            placeholder={"Seleccione un Cargo"}
-            value={cargo}
-            onChange={(e) => setCargo(e.target.value)}
+            label="Sede a la que pertenece"
+            placeholder="Seleccione una Sede"
+            value={sede}
+            onChange={setSede} // Al seleccionar una opción, almacena el UUID en 'sede'
+            options={sedesOptions} // Opciones de sedes
           />
         </div>
 
@@ -119,9 +141,7 @@ export const FormEditCoordinator = () => {
         </div>
 
         <ButtonSingle textButton="Actualizar Coordinador" type="submit" />
-        <p className="text-center text-red-500">
-          {msg}
-        </p>
+        <p className="text-center text-red-500">{msg}</p>
       </form>
     </div>
   );

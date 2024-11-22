@@ -6,8 +6,8 @@ import { Layout } from "./Layout";
 import { WelcomeAndText } from "../components/UI/WelcomeAndText";
 import { ChartHero } from "../components/ChartHero";
 import { BarChartEmployes } from "../components/BarChartEmployes";
-import ChartAllCordinators from "../components/ChartAllCordinators";
-import  ChartConsolidado  from "../components/ChartConsolidado";
+import ChartConsolidado from "../components/ChartConsolidado";
+import ChartTotal from "../components/ChartTotal";
 
 export const Dashboard = () => {
   const dispatch = useDispatch();
@@ -40,8 +40,8 @@ export const Dashboard = () => {
           <div className="flex-1 bg-zinc-100 rounded-lg text-current p-1 shadow-md text-center">
             <BarChartEmployes />
           </div>
-          <div className="flex-1 bg-zinc-100 rounded-lg text-current p-1 shadow-md text-center">
-            <ChartAllCordinators />
+          <div>
+            <ChartTotal />
           </div>
         </div>
       </div>

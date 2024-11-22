@@ -32,11 +32,11 @@ export const Consolidado = () => {
 
     // Renderiza nada si está cargando o hay un error
     if (isLoading) {
-        return <div>Loading...</div>; // Mensaje de carga, puedes personalizarlo
+        return <div>Loading...</div>;
     }
 
     if (isError) {
-        return <div>Error en la conexión, por favor intenta más tarde.</div>; // Mensaje de error
+        return <div>Error en la conexión, por favor intenta más tarde.</div>;
     }
 
     return (

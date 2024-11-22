@@ -1,8 +1,8 @@
 import { Sidebar } from "../components/Sidebar/Sidebar";
-import PropTypes from "prop-types";
 import { useNavigate, useLocation } from "react-router-dom";
 import ButtonBack from "../components/UI/ButtonBack";
 import { ArrowBigLeft } from "lucide-react";
+import PropTypes from "prop-types";
 
 export const Layout = ({ children }) => {
   const navigate = useNavigate();

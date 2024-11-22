@@ -40,7 +40,7 @@ export const FormEditAdmin = () => {
     e.preventDefault();
     try {
       await axios.patch(
-        `https://sistema-gestion-nomina-enova.onrender.com/administradores${id}`,
+        `https://sistema-gestion-nomina-enova.onrender.com/administradores/${id}`,
         {
           nombre: nombre,
           apellido: apellido,

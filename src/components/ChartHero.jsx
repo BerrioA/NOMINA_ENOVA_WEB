@@ -17,7 +17,9 @@ export const ChartHero = () => {
   // Función para obtener los datos de la API
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/nominas");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/nominas"
+      );
 
       // Agrupamos los datos por sede y periodo
       const groupedData = response.data.reduce((acc, curr) => {

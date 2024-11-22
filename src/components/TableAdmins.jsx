@@ -24,7 +24,9 @@ export const TableAdmins = () => {
 
   const getAdministradores = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/administradores");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/administradores"
+      );
       setAdministradores(response.data);
     } catch (error) {
       console.error("Error fetching administradores:", error);
@@ -34,7 +36,7 @@ export const TableAdmins = () => {
   const deleteAdministrador = async (administradorId) => {
     try {
       await axios.delete(
-        `http://localhost:5000/administradores/${administradorId}`
+        `https://sistema-gestion-nomina-enova.onrender.com/administradores/${administradorId}`
       );
       getAdministradores(); // Recargar la lista de empleados después de eliminar
     } catch (error) {
@@ -54,9 +56,7 @@ export const TableAdmins = () => {
       case "cargo":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">
-              {administrador.rol}
-            </p>
+            <p className="text-bold text-sm capitalize">{administrador.rol}</p>
             <p className="text-bold text-sm capitalize text-default-400">
               {administrador.sede}
             </p>

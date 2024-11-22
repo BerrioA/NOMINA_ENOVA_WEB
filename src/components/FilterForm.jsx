@@ -31,7 +31,9 @@ export default function FilterForm({ onFilter }) {
     // Cargar las sedes desde la API
     const fetchSedes = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/sedes");
+        const response = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/sedes"
+        );
         setSedes(response.data);
       } catch (error) {
         console.error("Error al cargar las sedes:", error);

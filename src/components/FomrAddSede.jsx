@@ -7,19 +7,22 @@ export const FormAddSede = () => {
   const [nombresede, setNombreSede] = useState("");
   const [msg, setMsg] = useState("");
 
-const guardarSede = async (e) => {
-  e.preventDefault();
-  try {
-    await axios.post("http://localhost:5000/sedes", {
-      nombresede,
-    });
-    setNombreSede("");
-  } catch (error) {
-    if (error.response) {
-      setMsg(error.response.data.msg);
+  const guardarSede = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(
+        "https://sistema-gestion-nomina-enova.onrender.com/sedes",
+        {
+          nombresede,
+        }
+      );
+      setNombreSede("");
+    } catch (error) {
+      if (error.response) {
+        setMsg(error.response.data.msg);
+      }
     }
-  }
-};
+  };
 
   return (
     <div className="container_principal mx-auto p-4 shadow-lg rounded-xl font-semibold">

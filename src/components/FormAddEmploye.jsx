@@ -23,7 +23,9 @@ export const FormAddEmploye = () => {
   useEffect(() => {
     const fetchCargos = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/cargos");
+        const response = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/cargos"
+        );
         const options = response.data.map((cargo) => ({
           key: cargo.uuid,
           label: cargo.nombrecargo,
@@ -40,16 +42,19 @@ export const FormAddEmploye = () => {
   const guardarEmpleado = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/empleados", {
-        nombre: nombre,
-        apellido: apellido,
-        cc: cc,
-        banco: banco,
-        numcuenta: numcuenta,
-        honomensual: honomensual,
-        sede: sede,
-        cargo: cargo,
-      });
+      await axios.post(
+        "https://sistema-gestion-nomina-enova.onrender.com/empleados",
+        {
+          nombre: nombre,
+          apellido: apellido,
+          cc: cc,
+          banco: banco,
+          numcuenta: numcuenta,
+          honomensual: honomensual,
+          sede: sede,
+          cargo: cargo,
+        }
+      );
       navigate("/empleados");
     } catch (error) {
       if (error.response) {

@@ -37,7 +37,9 @@ export const TableEmploye = () => {
 
   const getEmpleados = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/empleados");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/empleados"
+      );
       const empleadosConDetalles = response.data.map((empleado) => ({
         ...empleado,
         cargoNombre:
@@ -55,7 +57,9 @@ export const TableEmploye = () => {
 
   const getCargos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/cargos");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/cargos"
+      );
       setCargos(response.data);
     } catch (error) {
       console.error("Error fetching cargos:", error);
@@ -64,7 +68,9 @@ export const TableEmploye = () => {
 
   const getSedes = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/sedes");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/sedes"
+      );
       setSedes(response.data);
     } catch (error) {
       console.error("Error fetching sedes:", error);
@@ -73,7 +79,9 @@ export const TableEmploye = () => {
 
   const deleteEmpleado = async (empleadoId) => {
     try {
-      await axios.delete(`http://localhost:5000/empleados/${empleadoId}`);
+      await axios.delete(
+        `https://sistema-gestion-nomina-enova.onrender.com/empleados/${empleadoId}`
+      );
       getEmpleados();
     } catch (error) {
       console.error("Error al eliminar empleado:", error);

@@ -87,7 +87,7 @@ export const FormEditNomina = () => {
     const getEmpleadoById = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/empleados/${id}`
+          `https://sistema-gestion-nomina-enova.onrender.com/empleados/${id}`
         );
         setEmpleadoId(response.data.id);
         setNombre(response.data.nombre || "");
@@ -116,7 +116,7 @@ export const FormEditNomina = () => {
       if (!uuidNomina) return;
       try {
         const response = await axios.get(
-          `http://localhost:5000/nominas/${uuidNomina}`
+          `https://sistema-gestion-nomina-enova.onrender.com/nominas/${uuidNomina}`
         );
         const nomina = response.data;
         setHonoquincena(nomina.honoquincena);
@@ -150,30 +150,33 @@ export const FormEditNomina = () => {
   const actualizarNomina = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`http://localhost:5000/nominas/${uuidNomina}`, {
-        empleadoId: empleadoid,
-        honoquincena: honoquincena,
-        honodia: honodia,
-        totaldiasliquidar: totaldiasliquidar,
-        clasesapoyosena: clasesapoyosena,
-        valorclaseapoyosena: valorclaseapoyosena,
-        diasdominicales: diasdominicales,
-        valordiadominical: valordiadominical,
-        clasesintructor: clasesintructor,
-        valorclaseinstructor: valorclaseinstructor,
-        totalinscripcionesliquidar: totalinscripcionesliquidar,
-        valorcomisioninscripcion: valorcomisioninscripcion,
-        deducciones: deducciones,
-        honoperiodoliquidacion: honoperiodoliquidacion,
-        valortotalclasesapoyosena: valortotalclasesapoyosena,
-        valortotaldominicales: valortotaldominicales,
-        valortotalclasesinstructor: valortotalclasesinstructor,
-        comicioninscripcionestudiante: comicioninscripcionestudiante,
-        totalpagar: totalpagar,
-        pagosadicionalespendientes: pagosadicionalespendientes,
-        saldopendiente: saldopendiente,
-        observaciones: observaciones,
-      });
+      await axios.patch(
+        `https://sistema-gestion-nomina-enova.onrender.com/nominas/${uuidNomina}`,
+        {
+          empleadoId: empleadoid,
+          honoquincena: honoquincena,
+          honodia: honodia,
+          totaldiasliquidar: totaldiasliquidar,
+          clasesapoyosena: clasesapoyosena,
+          valorclaseapoyosena: valorclaseapoyosena,
+          diasdominicales: diasdominicales,
+          valordiadominical: valordiadominical,
+          clasesintructor: clasesintructor,
+          valorclaseinstructor: valorclaseinstructor,
+          totalinscripcionesliquidar: totalinscripcionesliquidar,
+          valorcomisioninscripcion: valorcomisioninscripcion,
+          deducciones: deducciones,
+          honoperiodoliquidacion: honoperiodoliquidacion,
+          valortotalclasesapoyosena: valortotalclasesapoyosena,
+          valortotaldominicales: valortotaldominicales,
+          valortotalclasesinstructor: valortotalclasesinstructor,
+          comicioninscripcionestudiante: comicioninscripcionestudiante,
+          totalpagar: totalpagar,
+          pagosadicionalespendientes: pagosadicionalespendientes,
+          saldopendiente: saldopendiente,
+          observaciones: observaciones,
+        }
+      );
       navigate("/nominas");
     } catch (error) {
       if (error.response) {

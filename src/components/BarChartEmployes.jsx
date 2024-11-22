@@ -16,7 +16,9 @@ export const BarChartEmployes = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/nominas");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/nominas"
+      );
 
       const employeesData = response.data.map((nomina) => ({
         nombre: `${nomina.empleado.nombre} ${nomina.empleado.apellido}`,

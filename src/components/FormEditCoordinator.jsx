@@ -24,7 +24,7 @@ export const FormEditCoordinator = () => {
     const getCoordinadorById = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/coordinadores/${id}`
+          `https://sistema-gestion-nomina-enova.onrender.com/coordinadores/${id}`
         );
         setNombre(response.data.nombre);
         setApellido(response.data.apellido);
@@ -48,7 +48,7 @@ export const FormEditCoordinator = () => {
     const fetchSedes = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/sedes/${id}/`
+          `https://sistema-gestion-nomina-enova.onrender.com/sedes/${id}/`
         );
         const options = response.data.map((sede) => ({
           key: sede.uuid,
@@ -66,16 +66,19 @@ export const FormEditCoordinator = () => {
   const actualizarCoordinador = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`http://localhost:5000/coordinadores/${id}`, {
-        nombre,
-        apellido,
-        correo,
-        password,
-        confPassword,
-        cargo,
-        sede, // Enviar el UUID de la sede
-        rol,
-      });
+      await axios.patch(
+        `https://sistema-gestion-nomina-enova.onrender.com/coordinadores/${id}`,
+        {
+          nombre,
+          apellido,
+          correo,
+          password,
+          confPassword,
+          cargo,
+          sede, // Enviar el UUID de la sede
+          rol,
+        }
+      );
       navigate("/coordinadores");
     } catch (error) {
       if (error.response) {

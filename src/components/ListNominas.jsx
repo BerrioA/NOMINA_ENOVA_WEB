@@ -25,7 +25,9 @@ export default function ListNominas() {
     // Cargar nombres de las sedes
     const fetchSedeNames = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/sedes");
+        const res = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/sedes"
+        );
         const namesMap = res.data.reduce((acc, sede) => {
           acc[sede.uuid] = sede.nombresede;
           return acc;
@@ -39,7 +41,9 @@ export default function ListNominas() {
     // Cargar nombres de los cargos
     const fetchCargoNames = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/cargos");
+        const res = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/cargos"
+        );
         const namesMap = res.data.reduce((acc, cargo) => {
           acc[cargo.uuid] = cargo.nombrecargo;
           return acc;
@@ -61,9 +65,12 @@ export default function ListNominas() {
       }
 
       try {
-        const res = await axios.get(cursor || "http://localhost:5000/nominas", {
-          signal: signal,
-        });
+        const res = await axios.get(
+          cursor || "https://sistema-gestion-nomina-enova.onrender.com/nominas",
+          {
+            signal: signal,
+          }
+        );
 
         const items = Array.isArray(res.data) ? res.data : [res.data];
         setHasMore(false);
@@ -144,17 +151,19 @@ export default function ListNominas() {
 
   const groupedItems = groupBySede(list.items);
 
-    const handleFilter = async (filters) => {
-      try {
-        const response = await axios.get("http://localhost:5000/nominas", {
+  const handleFilter = async (filters) => {
+    try {
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/nominas",
+        {
           params: filters,
-        });
-        list.setItems(response.data);
-      } catch (error) {
-        console.error("Error al filtrar:", error);
-      }
-    };
-
+        }
+      );
+      list.setItems(response.data);
+    } catch (error) {
+      console.error("Error al filtrar:", error);
+    }
+  };
 
   return (
     <div>

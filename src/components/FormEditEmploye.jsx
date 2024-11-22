@@ -24,7 +24,7 @@ export const FormEditEmploye = () => {
     const getEmpleadoById = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/empleados/${id}`
+          `https://sistema-gestion-nomina-enova.onrender.com/empleados/${id}`
         );
         setNombre(response.data.nombre);
         setApellido(response.data.apellido);
@@ -46,16 +46,19 @@ export const FormEditEmploye = () => {
   const actualizarEmpleado = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`http://localhost:5000/empleados/${id}`, {
-        nombre: nombre,
-        apellido: apellido,
-        cc: cc,
-        banco: banco,
-        numcuenta: numcuenta,
-        sede: sede,
-        cargo: cargo,
-        honomensual: honomensual,
-      });
+      await axios.patch(
+        `https://sistema-gestion-nomina-enova.onrender.com/empleados/${id}`,
+        {
+          nombre: nombre,
+          apellido: apellido,
+          cc: cc,
+          banco: banco,
+          numcuenta: numcuenta,
+          sede: sede,
+          cargo: cargo,
+          honomensual: honomensual,
+        }
+      );
       navigate("/empleados");
     } catch (error) {
       if (error.response) {

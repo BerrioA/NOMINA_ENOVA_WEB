@@ -10,7 +10,7 @@ export const FormAddNomina = () => {
   const fechaActual = new Date();
   const diaDelMes = fechaActual.getDate();
   // Dias en los cuales se habilitara para el coordinador la carga de Nómina
-  const diasHabilitados = [1, 2, 3, 4, 5,6,7, 8, 9, 15, 16, 17, 18, 19];
+  const diasHabilitados = [1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 17, 18, 19];
   const estaHabilitado = diasHabilitados.includes(diaDelMes);
   //Datos heredados del empleado por Id
   const [nombre, setNombre] = useState("");
@@ -113,7 +113,7 @@ export const FormAddNomina = () => {
     const getEmpleadoById = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/empleados/${id}`
+          `https://sistema-gestion-nomina-enova.onrender.com/empleados/${id}`
         );
         setEmpleadoId(response.data.id);
         setNombre(response.data.nombre);
@@ -137,7 +137,7 @@ export const FormAddNomina = () => {
     const getEmpleadoById = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/empleados/${id}`
+          `https://sistema-gestion-nomina-enova.onrender.com/empleados/${id}`
         );
         setNombre(response.data.nombre);
         setApellido(response.data.apellido);
@@ -159,30 +159,33 @@ export const FormAddNomina = () => {
   const guardarNomina = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/nominas", {
-        empleadoId: empleadoid,
-        honoquincena: honoquincena,
-        honodia: honodia,
-        totaldiasliquidar: totaldiasliquidar,
-        clasesapoyosena: clasesapoyosena,
-        valorclaseapoyosena: valorclaseapoyosena,
-        diasdominicales: diasdominicales,
-        valordiadominical: valordiadominical,
-        clasesintructor: clasesintructor,
-        valorclaseinstructor: valorclaseinstructor,
-        totalinscripcionesliquidar: totalinscripcionesliquidar,
-        valorcomisioninscripcion: valorcomisioninscripcion,
-        deducciones: deducciones,
-        honoperiodoliquidacion: honoperiodoliquidacion,
-        valortotalclasesapoyosena: valortotalclasesapoyosena,
-        valortotaldominicales: valortotaldominicales,
-        valortotalclasesinstructor: valortotalclasesinstructor,
-        comicioninscripcionestudiante: comicioninscripcionestudiante,
-        totalpagar: totalpagar,
-        pagosadicionalespendientes: pagosadicionalespendientes,
-        saldopendiente: saldopendiente,
-        observaciones: observaciones,
-      });
+      await axios.post(
+        "https://sistema-gestion-nomina-enova.onrender.com/nominas",
+        {
+          empleadoId: empleadoid,
+          honoquincena: honoquincena,
+          honodia: honodia,
+          totaldiasliquidar: totaldiasliquidar,
+          clasesapoyosena: clasesapoyosena,
+          valorclaseapoyosena: valorclaseapoyosena,
+          diasdominicales: diasdominicales,
+          valordiadominical: valordiadominical,
+          clasesintructor: clasesintructor,
+          valorclaseinstructor: valorclaseinstructor,
+          totalinscripcionesliquidar: totalinscripcionesliquidar,
+          valorcomisioninscripcion: valorcomisioninscripcion,
+          deducciones: deducciones,
+          honoperiodoliquidacion: honoperiodoliquidacion,
+          valortotalclasesapoyosena: valortotalclasesapoyosena,
+          valortotaldominicales: valortotaldominicales,
+          valortotalclasesinstructor: valortotalclasesinstructor,
+          comicioninscripcionestudiante: comicioninscripcionestudiante,
+          totalpagar: totalpagar,
+          pagosadicionalespendientes: pagosadicionalespendientes,
+          saldopendiente: saldopendiente,
+          observaciones: observaciones,
+        }
+      );
 
       navigate("/empleados");
     } catch (error) {

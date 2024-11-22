@@ -30,7 +30,9 @@ const ChartConsolidado = () => {
   useEffect(() => {
     const fetchNominas = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/nominas");
+        const response = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/nominas"
+        );
         const nominas = response.data;
 
         // Agrupar las nóminas por sede y periodo

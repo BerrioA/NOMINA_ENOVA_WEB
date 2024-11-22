@@ -8,7 +8,9 @@ const ChartAllCordinators = () => {
   useEffect(() => {
     const fetchCoordinadores = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/coordinadores");
+        const response = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/coordinadores"
+        );
         setCoordinadores(response.data);
       } catch (error) {
         console.error("Error al obtener los empleados:", error);

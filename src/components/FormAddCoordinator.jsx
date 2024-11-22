@@ -24,7 +24,9 @@ export const FormAddCoordinator = () => {
   useEffect(() => {
     const fetchSedes = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/sedes/");
+        const response = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/sedes"
+        );
         const options = response.data.map((sede) => ({
           key: sede.uuid,
           label: sede.nombresede,
@@ -42,7 +44,9 @@ export const FormAddCoordinator = () => {
   useEffect(() => {
     const fetchCargos = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/cargos");
+        const response = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/cargos"
+        );
         const options = response.data.map((cargo) => ({
           key: cargo.uuid,
           label: cargo.nombrecargo,
@@ -59,16 +63,19 @@ export const FormAddCoordinator = () => {
   const guardarCoordinador = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/coordinadores", {
-        nombre,
-        apellido,
-        correo,
-        password,
-        confPassword,
-        sede,
-        rol,
-        cargo,
-      });
+      await axios.post(
+        "https://sistema-gestion-nomina-enova.onrender.com/coordinadores",
+        {
+          nombre,
+          apellido,
+          correo,
+          password,
+          confPassword,
+          sede,
+          rol,
+          cargo,
+        }
+      );
       navigate("/coordinadores");
     } catch (error) {
       if (error.response) {

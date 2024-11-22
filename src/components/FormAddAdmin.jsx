@@ -17,15 +17,18 @@ export const FormAddAdmin = () => {
   const guardarAdministrador = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/administradores", {
-        nombre: nombre,
-        apellido: apellido,
-        correo: correo,
-        password: password,
-        confPassword: confPassword,
-        rol: rol,
-      });
-      navigate("/administradores"); // Redirigir a la lista de empleados
+      await axios.post(
+        "https://sistema-gestion-nomina-enova.onrender.com/administradores",
+        {
+          nombre: nombre,
+          apellido: apellido,
+          correo: correo,
+          password: password,
+          confPassword: confPassword,
+          rol: rol,
+        }
+      );
+      navigate("/administradores");
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);

@@ -20,7 +20,9 @@ export const SedesTable = () => {
 
   const getSedes = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/sedes");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/sedes"
+      );
       setSedes(response.data);
     } catch (error) {
       console.error("Error al intentar obtener las sedes: ", error);
@@ -34,7 +36,9 @@ export const SedesTable = () => {
 
   const deleteSede = async (uuid) => {
     try {
-      await axios.delete(`http://localhost:5000/sedes/${uuid}`);
+      await axios.delete(
+        `https://sistema-gestion-nomina-enova.onrender.com/sedes/${uuid}`
+      );
       getSedes();
     } catch (error) {
       console.error("Error al eliminar la sede." + error);

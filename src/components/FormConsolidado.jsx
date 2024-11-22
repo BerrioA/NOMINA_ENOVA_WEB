@@ -24,7 +24,9 @@ export default function Formconsolidado() {
     // Cargar los nombres de los cargos y mapearlos por UUID
     const fetchCargos = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/cargos");
+        const response = await axios.get(
+          "https://sistema-gestion-nomina-enova.onrender.com/cargos"
+        );
         const cargosData = response.data;
         const cargosMap = cargosData.reduce((acc, cargo) => {
           acc[cargo.uuid] = cargo.nombrecargo;

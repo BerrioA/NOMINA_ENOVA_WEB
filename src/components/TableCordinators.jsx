@@ -28,7 +28,9 @@ export const TableCordinators = () => {
 
   const getCoordinadores = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/coordinadores");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/nominas/coordinadores"
+      );
       setCoordinadores(response.data);
     } catch (error) {
       console.error("Error al obtener coordinadores:", error);
@@ -37,7 +39,9 @@ export const TableCordinators = () => {
 
   const getSedeNames = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/sedes");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/nominas/sedes"
+      );
       const sedes = response.data.reduce((acc, sede) => {
         acc[sede.uuid] = sede.nombresede;
         return acc;
@@ -50,7 +54,9 @@ export const TableCordinators = () => {
 
   const getCargoNames = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/cargos");
+      const response = await axios.get(
+        "https://sistema-gestion-nomina-enova.onrender.com/nominas/cargos"
+      );
       const cargos = response.data.reduce((acc, cargo) => {
         acc[cargo.uuid] = cargo.nombrecargo;
         return acc;
@@ -64,7 +70,7 @@ export const TableCordinators = () => {
   const deleteCoordinador = async (coordinadorId) => {
     try {
       await axios.delete(
-        `http://localhost:5000/coordinadores/${coordinadorId}`
+        `https://sistema-gestion-nomina-enova.onrender.com/coordinadores/${coordinadorId}`
       );
       getCoordinadores();
     } catch (error) {
